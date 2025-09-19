@@ -6,6 +6,127 @@ const isSupabaseConfigured = () => {
   return supabase !== null;
 };
 
+// Sample data for when Supabase is not configured
+const SAMPLE_IPTV_OFFERS: IPTVOffer[] = [
+  {
+    id: '1',
+    name: 'MTN Plus Premium',
+    price: '15 TND/month',
+    description: 'Premium IPTV with international channels and 4K streaming quality',
+    image_url: 'https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&w=400',
+    download_url: 'https://wa.me/21655338664',
+    app_name: 'MTNPlus',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '2',
+    name: 'Orca Plus 4K',
+    price: '20 TND/month',
+    description: 'Ultra HD streaming with sports and entertainment channels',
+    image_url: 'https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&w=400',
+    download_url: 'https://wa.me/21655338664',
+    app_name: 'Orca Plus 4K',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '3',
+    name: 'ZEBRA IPTV',
+    price: '12 TND/month',
+    description: 'Reliable streaming service with Arabic and international content',
+    image_url: 'https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&w=400',
+    download_url: 'https://wa.me/21655338664',
+    app_name: 'ZEBRA',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '4',
+    name: 'Best IPTV HD',
+    price: '18 TND/month',
+    description: 'High definition streaming with premium channels and reliable service',
+    image_url: 'https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&w=400',
+    download_url: 'https://wa.me/21655338664',
+    app_name: 'Best IPTV HD',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '5',
+    name: 'STRONG 4K',
+    price: '25 TND/month',
+    description: 'Professional 4K streaming solution with premium features',
+    image_url: 'https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&w=400',
+    download_url: 'https://wa.me/21655338664',
+    app_name: 'STRONG 4K',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '6',
+    name: 'شاهد BeIN',
+    price: '22 TND/month',
+    description: 'Arabic premium sports and entertainment channels',
+    image_url: 'https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&w=400',
+    download_url: 'https://wa.me/21655338664',
+    app_name: 'شاهد BeIN',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const SAMPLE_ANDROID_BOXES: AndroidBox[] = [
+  {
+    id: '1',
+    name: 'Android TV Box Pro 4K',
+    price: '120 TND',
+    description: 'High-performance Android TV box with 4K HDR support and premium features',
+    image_url: 'https://images.pexels.com/photos/4009402/pexels-photo-4009402.jpeg?auto=compress&cs=tinysrgb&w=400',
+    purchase_url: 'https://wa.me/21655338664',
+    specifications: '4GB RAM, 64GB Storage, Android 11, 4K HDR, WiFi 6, Bluetooth 5.0',
+    is_available: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '2',
+    name: 'Smart Media Player X1',
+    price: '95 TND',
+    description: 'Compact and powerful streaming device for all your entertainment needs',
+    image_url: 'https://images.pexels.com/photos/4009402/pexels-photo-4009402.jpeg?auto=compress&cs=tinysrgb&w=400',
+    purchase_url: 'https://wa.me/21655338664',
+    specifications: '2GB RAM, 32GB Storage, Android 10, Full HD, WiFi 5, Bluetooth 4.2',
+    is_available: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '3',
+    name: 'Ultra Stream Box',
+    price: '150 TND',
+    description: 'Premium streaming solution with advanced features and superior performance',
+    image_url: 'https://images.pexels.com/photos/4009402/pexels-photo-4009402.jpeg?auto=compress&cs=tinysrgb&w=400',
+    purchase_url: 'https://wa.me/21655338664',
+    specifications: '6GB RAM, 128GB Storage, Android 12, 4K HDR10+, WiFi 6E, Bluetooth 5.2',
+    is_available: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '4',
+    name: 'Budget Stream Device',
+    price: '75 TND',
+    description: 'Affordable streaming solution with reliable performance',
+    image_url: 'https://images.pexels.com/photos/4009402/pexels-photo-4009402.jpeg?auto=compress&cs=tinysrgb&w=400',
+    purchase_url: 'https://wa.me/21655338664',
+    specifications: '1GB RAM, 16GB Storage, Android 9, HD Ready, WiFi 4, Bluetooth 4.0',
+    is_available: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
 // Enhanced error logging function
 const logError = (operation: string, error: any, context?: any) => {
   console.error(`Database Error [${operation}]:`, {
@@ -28,8 +149,8 @@ const getAuthenticatedSupabase = () => {
 export const getOffers = async (): Promise<IPTVOffer[]> => {
   try {
     if (!isSupabaseConfigured()) {
-      console.warn('Supabase not configured, returning empty offers');
-      return [];
+      console.warn('Supabase not configured, returning sample offers');
+      return SAMPLE_IPTV_OFFERS;
     }
     
     console.log('Fetching IPTV offers...');
@@ -283,8 +404,8 @@ export const deleteOffer = async (id: string): Promise<boolean> => {
 export const getAndroidBoxes = async (): Promise<AndroidBox[]> => {
   try {
     if (!isSupabaseConfigured()) {
-      console.warn('Supabase not configured, returning empty boxes');
-      return [];
+      console.warn('Supabase not configured, returning sample boxes');
+      return SAMPLE_ANDROID_BOXES;
     }
     
     console.log('Fetching Android boxes...');
