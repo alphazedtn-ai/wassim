@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://wassimtechtn.netlify.app/sitemap.xml
+
+# Block access to admin areas (optional)
+Disallow: /admin
