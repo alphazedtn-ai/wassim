@@ -1,6 +1,11 @@
 import { supabase } from '../lib/supabase';
 import { IPTVOffer, AdminData, AndroidBox } from '../types';
 
+// Check if Supabase is properly configured
+const isSupabaseConfigured = () => {
+  return supabase !== null;
+};
+
 // Enhanced error logging function
 const logError = (operation: string, error: any, context?: any) => {
   console.error(`Database Error [${operation}]:`, {
@@ -12,13 +17,21 @@ const logError = (operation: string, error: any, context?: any) => {
 
 // Helper function to ensure authenticated requests
 const getAuthenticatedSupabase = () => {
+  if (!isSupabaseConfigured()) {
+    throw new Error('Supabase is not configured. Please check your environment variables.');
+  }
   // For admin operations, we need to ensure we're using the authenticated client
-  return supabase;
+  return supabase!;
 };
 
 // IPTV Offers Functions
 export const getOffers = async (): Promise<IPTVOffer[]> => {
   try {
+    if (!isSupabaseConfigured()) {
+      console.warn('Supabase not configured, returning empty offers');
+      return [];
+    }
+    
     console.log('Fetching IPTV offers...');
     
     const { data, error } = await getAuthenticatedSupabase()
@@ -269,6 +282,11 @@ export const deleteOffer = async (id: string): Promise<boolean> => {
 // Android Boxes Functions
 export const getAndroidBoxes = async (): Promise<AndroidBox[]> => {
   try {
+    if (!isSupabaseConfigured()) {
+      console.warn('Supabase not configured, returning empty boxes');
+      return [];
+    }
+    
     console.log('Fetching Android boxes...');
     
     const { data, error } = await getAuthenticatedSupabase()
@@ -522,6 +540,21 @@ export const deleteAndroidBox = async (id: string): Promise<boolean> => {
 // Admin Settings Functions
 export const getAdminData = async (): Promise<AdminData> => {
   try {
+    if (!isSupabaseConfigured()) {
+      console.warn('Supabase not configured, returning default admin data');
+      return {
+        service_name: 'TechnSat chez Wassim',
+        available_apps: [
+          'MTNPlus', 'Orca Plus 4K', 'Orca Pro+', 'ESPRO', 'ZEBRA', 'OTT MTN EXTREAM',
+          'Best IPTV HD', 'STRONG 4K', 'BD TV', '24 Live IPTV Page', 'Pro Max TV Player',
+          'X2 Smart', 'Android Media Box', 'Crazy TV Max', 'شاهد BeIN', 'AIS PLAY',
+          'MATADOR', 'MB Sat OTT-Pro TV', 'NEO TV PRO', 'COMBO IPTV', 'MY HD PREMIER',
+          'Downloader', 'MAX OTT', 'YouTube', 'ULTRA IPTV', 'MTN OTT STORE', 'SAM IPTV',
+          'BUENO TV', 'M TV', 'AP-LIVE WORLD CHANNELS'
+        ]
+      };
+    }
+    
     console.log('Fetching admin settings...');
     
     const { data, error } = await getAuthenticatedSupabase()
@@ -659,11 +692,16 @@ export const saveAdminData = async (adminData: Partial<AdminData>): Promise<Admi
 
 // Real-time subscription functions with enhanced error handling
 export const subscribeToOffers = (callback: (offers: IPTVOffer[]) => void) => {
+  if (!isSupabaseConfigured()) {
+    console.warn('Supabase not configured, skipping offers subscription');
+    return { unsubscribe: () => {} };
+  }
+  
   const channelName = `iptv_offers_${Date.now()}_${Math.random()}`;
   
   console.log(`Setting up real-time subscription for IPTV offers: ${channelName}`);
   
-  const subscription = supabase
+  const subscription = supabase!
     .channel(channelName)
     .on('postgres_changes', 
       { 
@@ -696,11 +734,16 @@ export const subscribeToOffers = (callback: (offers: IPTVOffer[]) => void) => {
 };
 
 export const subscribeToAndroidBoxes = (callback: (boxes: AndroidBox[]) => void) => {
+  if (!isSupabaseConfigured()) {
+    console.warn('Supabase not configured, skipping boxes subscription');
+    return { unsubscribe: () => {} };
+  }
+  
   const channelName = `android_boxes_${Date.now()}_${Math.random()}`;
   
   console.log(`Setting up real-time subscription for Android boxes: ${channelName}`);
   
-  const subscription = supabase
+  const subscription = supabase!
     .channel(channelName)
     .on('postgres_changes', 
       { 
@@ -733,11 +776,16 @@ export const subscribeToAndroidBoxes = (callback: (boxes: AndroidBox[]) => void)
 };
 
 export const subscribeToAdminSettings = (callback: (adminData: AdminData) => void) => {
+  if (!isSupabaseConfigured()) {
+    console.warn('Supabase not configured, skipping admin settings subscription');
+    return { unsubscribe: () => {} };
+  }
+  
   const channelName = `admin_settings_${Date.now()}_${Math.random()}`;
   
   console.log(`Setting up real-time subscription for admin settings: ${channelName}`);
   
-  const subscription = supabase
+  const subscription = supabase!
     .channel(channelName)
     .on('postgres_changes', 
       { 

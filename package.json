@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:netlify": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "vite preview"
+    "start": "vite preview",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
