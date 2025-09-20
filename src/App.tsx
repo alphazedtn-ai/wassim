@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { isSupabaseConfigured } from './lib/supabase';
 import Header from './components/Header';
 import IPTVCard from './components/IPTVCard';
 import AndroidBoxCard from './components/AndroidBoxCard';
@@ -28,6 +29,7 @@ function App() {
   });
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showSupabaseWarning, setShowSupabaseWarning] = useState(!isSupabaseConfigured);
 
   useEffect(() => {
     loadInitialData();
@@ -122,6 +124,21 @@ function App() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(139,92,246,0.1),transparent_50%)]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(16,185,129,0.1),transparent_50%)]"></div>
       </div>
+
+      {/* Supabase Configuration Warning */}
+      {showSupabaseWarning && (
+        <div className="bg-yellow-500/20 border-b border-yellow-500/30 text-yellow-400 px-4 py-3 text-center relative">
+          <p className="text-sm">
+            ⚠️ Supabase configuration missing. Please set up environment variables for full functionality.
+          </p>
+          <button
+            onClick={() => setShowSupabaseWarning(false)}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-yellow-400 hover:text-yellow-300"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       <Header onAdminClick={handleAdminClick} serviceName={adminData.service_name} />
       
