@@ -126,10 +126,10 @@ function App() {
       </div>
 
       {/* Supabase Configuration Warning */}
-      {showSupabaseWarning && (
+      {showSupabaseWarning && !isSupabaseConfigured && (
         <div className="bg-yellow-500/20 border-b border-yellow-500/30 text-yellow-400 px-4 py-3 text-center relative">
           <p className="text-sm">
-            ⚠️ Supabase configuration missing. Please set up environment variables for full functionality.
+            ⚠️ Database not connected. <a href="/NETLIFY_SUPABASE_SETUP.md" className="underline hover:text-yellow-300">Click here for 5-minute setup guide</a> to enable admin panel and content management.
           </p>
           <button
             onClick={() => setShowSupabaseWarning(false)}
