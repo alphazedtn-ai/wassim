@@ -1,5 +1,14 @@
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { IPTVOffer, AdminData, AndroidBox } from '../types';
+
+// Check if Supabase is properly configured
+const checkSupabaseConfig = () => {
+  if (!isSupabaseConfigured) {
+    console.warn('Supabase not configured. Using fallback behavior.');
+    return false;
+  }
+  return true;
+};
 
 // Enhanced error logging function
 const logError = (operation: string, error: any, context?: any) => {
@@ -19,6 +28,10 @@ const getAuthenticatedSupabase = () => {
 // IPTV Offers Functions
 export const getOffers = async (): Promise<IPTVOffer[]> => {
   try {
+    if (!checkSupabaseConfig()) {
+      return [];
+    }
+
     console.log('Fetching IPTV offers...');
     
     const { data, error } = await getAuthenticatedSupabase()
@@ -41,6 +54,11 @@ export const getOffers = async (): Promise<IPTVOffer[]> => {
 
 export const saveOffer = async (offer: Omit<IPTVOffer, 'id' | 'created_at' | 'updated_at'>): Promise<IPTVOffer | null> => {
   try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot save offer: Supabase not configured');
+      return null;
+    }
+
     // Enhanced validation
     if (!offer.name?.trim()) {
       console.error('Validation failed: App name is required');
@@ -100,6 +118,11 @@ export const saveOffer = async (offer: Omit<IPTVOffer, 'id' | 'created_at' | 'up
 
 export const updateOffer = async (id: string, offer: Partial<IPTVOffer>): Promise<IPTVOffer | null> => {
   try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot update offer: Supabase not configured');
+      return null;
+    }
+
     if (!id?.trim()) {
       console.error('Validation failed: Valid ID is required for update');
       return null;
@@ -212,6 +235,11 @@ export const updateOffer = async (id: string, offer: Partial<IPTVOffer>): Promis
 
 export const deleteOffer = async (id: string): Promise<boolean> => {
   try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot delete offer: Supabase not configured');
+      return false;
+    }
+
     if (!id?.trim()) {
       console.error('Validation failed: Valid ID is required for delete');
       return false;
@@ -269,6 +297,10 @@ export const deleteOffer = async (id: string): Promise<boolean> => {
 // Android Boxes Functions
 export const getAndroidBoxes = async (): Promise<AndroidBox[]> => {
   try {
+    if (!checkSupabaseConfig()) {
+      return [];
+    }
+
     console.log('Fetching Android boxes...');
     
     const { data, error } = await getAuthenticatedSupabase()
@@ -291,6 +323,11 @@ export const getAndroidBoxes = async (): Promise<AndroidBox[]> => {
 
 export const saveAndroidBox = async (box: Omit<AndroidBox, 'id' | 'created_at' | 'updated_at'>): Promise<AndroidBox | null> => {
   try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot save Android box: Supabase not configured');
+      return null;
+    }
+
     // Enhanced validation
     if (!box.name?.trim()) {
       console.error('Validation failed: Box name is required');
@@ -349,6 +386,11 @@ export const saveAndroidBox = async (box: Omit<AndroidBox, 'id' | 'created_at' |
 
 export const updateAndroidBox = async (id: string, box: Partial<AndroidBox>): Promise<AndroidBox | null> => {
   try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot update Android box: Supabase not configured');
+      return null;
+    }
+
     if (!id?.trim()) {
       console.error('Validation failed: Valid ID is required for update');
       return null;
@@ -465,6 +507,11 @@ export const updateAndroidBox = async (id: string, box: Partial<AndroidBox>): Pr
 
 export const deleteAndroidBox = async (id: string): Promise<boolean> => {
   try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot delete Android box: Supabase not configured');
+      return false;
+    }
+
     if (!id?.trim()) {
       console.error('Validation failed: Valid ID is required for delete');
       return false;
@@ -522,6 +569,21 @@ export const deleteAndroidBox = async (id: string): Promise<boolean> => {
 // Admin Settings Functions
 export const getAdminData = async (): Promise<AdminData> => {
   try {
+    if (!checkSupabaseConfig()) {
+      // Return default data when Supabase is not configured
+      return {
+        service_name: 'TechnSat chez Wassim',
+        available_apps: [
+          'MTNPlus', 'Orca Plus 4K', 'Orca Pro+', 'ESPRO', 'ZEBRA', 'OTT MTN EXTREAM',
+          'Best IPTV HD', 'STRONG 4K', 'BD TV', '24 Live IPTV Page', 'Pro Max TV Player',
+          'X2 Smart', 'Android Media Box', 'Crazy TV Max', 'شاهد BeIN', 'AIS PLAY',
+          'MATADOR', 'MB Sat OTT-Pro TV', 'NEO TV PRO', 'COMBO IPTV', 'MY HD PREMIER',
+          'Downloader', 'MAX OTT', 'YouTube', 'ULTRA IPTV', 'MTN OTT STORE', 'SAM IPTV',
+          'BUENO TV', 'M TV', 'AP-LIVE WORLD CHANNELS'
+        ]
+      };
+    }
+
     console.log('Fetching admin settings...');
     
     const { data, error } = await getAuthenticatedSupabase()
@@ -570,6 +632,11 @@ export const getAdminData = async (): Promise<AdminData> => {
 
 export const saveAdminData = async (adminData: Partial<AdminData>): Promise<AdminData | null> => {
   try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot save admin data: Supabase not configured');
+      return null;
+    }
+
     console.log('Saving admin data:', adminData);
 
     // Check current session
@@ -659,6 +726,11 @@ export const saveAdminData = async (adminData: Partial<AdminData>): Promise<Admi
 
 // Real-time subscription functions with enhanced error handling
 export const subscribeToOffers = (callback: (offers: IPTVOffer[]) => void) => {
+  if (!checkSupabaseConfig()) {
+    console.warn('Cannot subscribe to offers: Supabase not configured');
+    return { unsubscribe: () => {} };
+  }
+
   const channelName = `iptv_offers_${Date.now()}_${Math.random()}`;
   
   console.log(`Setting up real-time subscription for IPTV offers: ${channelName}`);
@@ -696,6 +768,11 @@ export const subscribeToOffers = (callback: (offers: IPTVOffer[]) => void) => {
 };
 
 export const subscribeToAndroidBoxes = (callback: (boxes: AndroidBox[]) => void) => {
+  if (!checkSupabaseConfig()) {
+    console.warn('Cannot subscribe to Android boxes: Supabase not configured');
+    return { unsubscribe: () => {} };
+  }
+
   const channelName = `android_boxes_${Date.now()}_${Math.random()}`;
   
   console.log(`Setting up real-time subscription for Android boxes: ${channelName}`);
@@ -733,6 +810,11 @@ export const subscribeToAndroidBoxes = (callback: (boxes: AndroidBox[]) => void)
 };
 
 export const subscribeToAdminSettings = (callback: (adminData: AdminData) => void) => {
+  if (!checkSupabaseConfig()) {
+    console.warn('Cannot subscribe to admin settings: Supabase not configured');
+    return { unsubscribe: () => {} };
+  }
+
   const channelName = `admin_settings_${Date.now()}_${Math.random()}`;
   
   console.log(`Setting up real-time subscription for admin settings: ${channelName}`);
