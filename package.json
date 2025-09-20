@@ -5,11 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "build:netlify": "npm ci && npm run build",
+    "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "type-check": "tsc --noEmit"
+    "preview": "vite preview"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
