@@ -78,14 +78,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
     const checkConnection = async () => {
       try {
         console.log('Checking Supabase connection...');
-        
-        if (!supabase) {
-          console.error('Supabase client not initialized');
-          setConnectionStatus('disconnected');
-          setError('Supabase configuration missing. Please set up environment variables.');
-          return false;
-        }
-        
         const { data, error } = await supabase.from('iptv_offers').select('count').limit(1);
         if (error) {
           console.error('Connection check failed:', error);

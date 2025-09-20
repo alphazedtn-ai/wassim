@@ -16,7 +16,6 @@ import {
   subscribeToAndroidBoxes
 } from './utils/database';
 import { MessageCircle, Tv, Smartphone, Monitor, Wifi, Zap, Shield, Headphones } from 'lucide-react';
-import { supabase } from './lib/supabase';
 
 function App() {
   const [offers, setOffers] = useState<IPTVOffer[]>([]);
@@ -135,13 +134,6 @@ function App() {
           <p className="text-lg md:text-xl text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto px-2">
             Experience high-quality streaming with our carefully curated IPTV packages and premium Android TV boxes. Serving Tunisia with reliable 4K streaming and international content.
           </p>
-          {!supabase && (
-            <div className="bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 px-4 py-3 rounded-xl mb-6 max-w-2xl mx-auto">
-              <p className="text-sm">
-                <strong>Demo Mode:</strong> Showing sample data. Set up Supabase to manage your own content.
-              </p>
-            </div>
-          )}
           <button
             onClick={handleWhatsAppClick}
             className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold px-6 md:px-8 py-3 md:py-4 rounded-2xl shadow-lg hover:shadow-green-500/25 transform hover:scale-105 transition-all duration-200 flex items-center space-x-3 mx-auto border border-green-500/30"
