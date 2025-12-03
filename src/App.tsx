@@ -3,6 +3,7 @@ import { isSupabaseConfigured } from './lib/supabase';
 import Header from './components/Header';
 import IPTVCard from './components/IPTVCard';
 import AndroidBoxCard from './components/AndroidBoxCard';
+import AndroidBoxesShowcase from './components/AndroidBoxesShowcase';
 import AdminLogin from './components/AdminLogin';
 import AdminPanel from './components/AdminPanel';
 import Footer from './components/Footer';
@@ -142,6 +143,9 @@ function App() {
 
       <Header onAdminClick={handleAdminClick} serviceName={adminData.service_name} />
       
+      {/* Android Boxes Showcase Section */}
+      <AndroidBoxesShowcase boxes={androidBoxes} />
+      
       {/* Hero Section - Optimized for Mobile */}
       <section className="container mx-auto px-4 py-8 md:py-12 relative z-10">
         <div className="text-center mb-8 md:mb-12">
@@ -214,7 +218,7 @@ function App() {
       </section>
 
       {/* Android Boxes Section */}
-      <section className="container mx-auto px-4 py-6 md:py-8 relative z-10">
+      <section className="container mx-auto px-4 py-6 md:py-8 relative z-10" data-section="android-boxes">
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-3 md:mb-4">
             Android TV Boxes
