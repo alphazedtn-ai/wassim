@@ -4,20 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SEOHead from '../components/SEOHead';
 import { AndroidBox, AdminData } from '../types';
-import { 
-  Monitor, 
-  MessageCircle, 
-  Filter, 
-  Grid, 
-  List, 
-  Search,
-  CheckCircle,
-  XCircle,
-  Cpu,
-  Wifi,
-  Star,
-  ArrowRight
-} from 'lucide-react';
+import { Monitor, MessageCircle, Filter, Grid2x2 as Grid, List, Search, CheckCircle, XCircle, Cpu, Wifi, Star, ArrowRight } from 'lucide-react';
 
 interface AndroidBoxesPageProps {
   boxes: AndroidBox[];
