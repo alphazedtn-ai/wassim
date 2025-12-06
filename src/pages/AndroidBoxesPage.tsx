@@ -106,25 +106,25 @@ const AndroidBoxesPage: React.FC<AndroidBoxesPageProps> = ({
         <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Search */}
-            <div className="relative flex-1 max-w-md">
+            <div className="relative w-full lg:flex-1 lg:max-w-md">
               <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Search Android boxes..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-400 backdrop-blur-sm"
+                className={`w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-400 backdrop-blur-sm ${isRTL ? 'text-right' : 'text-left'}`}
               />
             </div>
 
             {/* Filters */}
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
+            <div className={`flex flex-wrap items-center gap-2 md:gap-4 ${isRTL ? 'space-x-reverse' : ''}`}>
+              <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
                 <Filter className="w-4 h-4 text-gray-400" />
                 <select
                   value={filterAvailable}
                   onChange={(e) => setFilterAvailable(e.target.value as any)}
-                  className="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm backdrop-blur-sm focus:ring-2 focus:ring-orange-500"
+                  className={`bg-white/10 border border-white/20 rounded-lg px-2 md:px-3 py-2 text-white text-xs md:text-sm backdrop-blur-sm focus:ring-2 focus:ring-orange-500 ${isRTL ? 'text-right' : 'text-left'}`}
                 >
                   <option value="all" className="bg-gray-800">All Boxes</option>
                   <option value="available" className="bg-gray-800">Available</option>
@@ -135,7 +135,7 @@ const AndroidBoxesPage: React.FC<AndroidBoxesPageProps> = ({
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm backdrop-blur-sm focus:ring-2 focus:ring-orange-500"
+                className={`bg-white/10 border border-white/20 rounded-lg px-2 md:px-3 py-2 text-white text-xs md:text-sm backdrop-blur-sm focus:ring-2 focus:ring-orange-500 ${isRTL ? 'text-right' : 'text-left'}`}
               >
                 <option value="newest" className="bg-gray-800">Newest First</option>
                 <option value="name" className="bg-gray-800">Name A-Z</option>

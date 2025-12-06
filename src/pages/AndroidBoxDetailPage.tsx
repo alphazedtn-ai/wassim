@@ -104,7 +104,7 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
       
       {/* Breadcrumb */}
       <section className="container mx-auto px-4 py-4 relative z-10">
-        <div className="flex items-center space-x-2 text-sm text-gray-400">
+        <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} text-sm text-gray-400`}>
           <Link to="/" className="hover:text-white transition-colors">{t('nav.home')}</Link>
           <span>/</span>
           <Link to="/android-boxes" className="hover:text-white transition-colors">{t('nav.androidBoxes')}</Link>
@@ -171,10 +171,10 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
             <div>
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                  <h1 className={`text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
                     {box.name}
                   </h1>
-                  <div className="flex items-center space-x-4">
+                  <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'} flex-wrap gap-2`}>
                     <div className="text-3xl font-bold text-orange-400">{box.price}</div>
                     <button
                       onClick={handleShare}
@@ -188,7 +188,7 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
               </div>
 
               {box.description && (
-                <p className="text-lg text-gray-300 leading-relaxed">
+                <p className={`text-base md:text-lg text-gray-300 leading-relaxed ${isRTL ? 'text-right' : 'text-left'}`}>
                   {box.description}
                 </p>
               )}

@@ -78,15 +78,15 @@ const HomePage: React.FC<HomePageProps> = ({
       {/* Hero Section - Optimized for Mobile */}
       <section className="container mx-auto px-4 py-8 md:py-12 relative z-10">
         <div className="text-center mb-8 md:mb-12">
-          <h1 className={`text-3xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-4 md:mb-6 leading-tight ${isRTL ? 'text-right' : ''}`}>
+          <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-4 md:mb-6 leading-tight ${isRTL ? 'text-right' : 'text-center'} px-2`}>
             {t('hero.title')}
           </h1>
-          <p className={`text-lg md:text-xl text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto px-2 ${isRTL ? 'text-right' : ''}`}>
+          <p className={`text-base md:text-lg lg:text-xl text-gray-300 mb-6 md:mb-8 max-w-3xl mx-auto px-4 leading-relaxed ${isRTL ? 'text-right' : 'text-center'}`}>
             {t('hero.subtitle')}
           </p>
           <button
             onClick={handleWhatsAppClick}
-            className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold px-6 md:px-8 py-3 md:py-4 rounded-2xl shadow-lg hover:shadow-green-500/25 transform hover:scale-105 transition-all duration-200 flex items-center space-x-3 mx-auto border border-green-500/30"
+            className={`bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold px-6 md:px-8 py-3 md:py-4 rounded-2xl shadow-lg hover:shadow-green-500/25 transform hover:scale-105 transition-all duration-200 flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'} mx-auto border border-green-500/30`}
             aria-label="Contact TechnSat on WhatsApp"
           >
             <MessageCircle className="w-5 h-5 md:w-6 md:h-6" />
@@ -95,7 +95,7 @@ const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         {/* Modern Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-12 md:mb-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-12 md:mb-16">
           <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 text-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/10">
             <Tv className="w-6 h-6 md:w-8 md:h-8 text-blue-400 mx-auto mb-2" />
             <div className="text-xl md:text-2xl font-bold text-blue-400">{offers.length}+</div>

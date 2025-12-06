@@ -17,3 +17,42 @@
 [dir="rtl"] {
   font-family: 'Noto Sans Arabic', system-ui, -apple-system, sans-serif;
 }
+
+/* Language-specific improvements */
+.lang-ar {
+  font-family: 'Noto Sans Arabic', system-ui, -apple-system, sans-serif;
+}
+
+.lang-ar h1, .lang-ar h2, .lang-ar h3, .lang-ar h4, .lang-ar h5, .lang-ar h6 {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.lang-ar p, .lang-ar span {
+  line-height: 1.6;
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  [dir="rtl"] .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+    margin-right: 0.5rem;
+    margin-left: 0;
+  }
+}
+
+/* Smooth transitions for language switching */
+* {
+  transition: font-family 0.3s ease;
+}
+
+/* Fix for select elements in RTL */
+[dir="rtl"] select {
+  background-position: left 0.5rem center;
+  padding-left: 2rem;
+  padding-right: 0.75rem;
+}
