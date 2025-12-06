@@ -311,7 +311,7 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
                       }}
                     />
                     <div className="absolute bottom-2 left-2">
-                      <div className="bg-orange-500/20 backdrop-blur-sm border border-orange-500/30 text-orange-400 px-2 py-1 rounded-lg font-bold text-sm">
+                      <div className="bg-black/80 backdrop-blur-sm border-2 border-orange-400 text-white px-2 py-1 rounded-lg font-bold text-sm shadow-lg">
                         {relatedBox.price}
                       </div>
                     </div>

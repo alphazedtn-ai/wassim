@@ -184,7 +184,7 @@ const HomePage: React.FC<HomePageProps> = ({
                       }}
                     />
                     <div className="absolute bottom-3 left-3">
-                      <div className="bg-orange-500/20 backdrop-blur-sm border border-orange-500/30 text-orange-400 px-3 py-2 rounded-xl font-bold text-lg">
+                      <div className="bg-black/80 backdrop-blur-sm border-2 border-orange-400 text-white px-3 py-2 rounded-xl font-bold text-lg shadow-lg">
                         {box.price}
                       </div>
                     </div>

@@ -34,12 +34,12 @@ const AndroidBoxCard: React.FC<AndroidBoxCardProps> = ({ box }) => {
         />
         <div className="absolute top-3 right-3">
           {box.is_available ? (
-            <div className="bg-green-500/20 backdrop-blur-sm border border-green-500/30 text-green-400 px-2 py-1 rounded-full text-xs flex items-center space-x-1">
+            <div className="bg-black/80 backdrop-blur-sm border border-green-400 text-green-300 px-2 py-1 rounded-full text-xs flex items-center space-x-1 shadow-lg">
               <CheckCircle className="w-3 h-3" />
               <span>Available</span>
             </div>
           ) : (
-            <div className="bg-red-500/20 backdrop-blur-sm border border-red-500/30 text-red-400 px-2 py-1 rounded-full text-xs flex items-center space-x-1">
+            <div className="bg-black/80 backdrop-blur-sm border border-red-400 text-red-300 px-2 py-1 rounded-full text-xs flex items-center space-x-1 shadow-lg">
               <XCircle className="w-3 h-3" />
               <span>Out of Stock</span>
             </div>
