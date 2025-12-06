@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick, serviceName }) => {
     <header className="bg-black/20 backdrop-blur-md border-b border-white/10 sticky top-0 z-30">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
+          <div className="flex items-center space-x-4">
             <Link to="/" className="flex items-center space-x-4 hover:opacity-80 transition-opacity">
               <img 
                 src="https://i.postimg.cc/prMmry13/506597284-710079311885276-7394493161693276837-n.jpg" 
@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick, serviceName }) => {
             </Link>
           </div>
           
-          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
+          <div className="flex items-center space-x-4">
             {/* Navigation */}
             <nav className={`hidden md:flex items-center ${isRTL ? 'space-x-reverse space-x-6' : 'space-x-6'}`}>
               <Link 

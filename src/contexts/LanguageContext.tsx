@@ -359,10 +359,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     // Update document direction for RTL languages
     document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = language;
-    
-    // Update body class for language-specific styling
-    document.body.className = document.body.className.replace(/lang-\w+/g, '');
-    document.body.classList.add(`lang-${language}`);
   }, [language]);
 
   const t = (key: string): string => {
