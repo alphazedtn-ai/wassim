@@ -1,5 +1,6 @@
 import React from 'react';
 import { Download, Smartphone, ExternalLink } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { IPTVOffer } from '../types';
 
 interface IPTVCardProps {
@@ -7,6 +8,7 @@ interface IPTVCardProps {
 }
 
 const IPTVCard: React.FC<IPTVCardProps> = ({ offer }) => {
+  const { t } = useLanguage();
   const handleDownload = () => {
     if (offer.download_url && offer.download_url.trim() !== '') {
       // Check if it's a valid URL
@@ -35,11 +37,11 @@ const IPTVCard: React.FC<IPTVCardProps> = ({ offer }) => {
   const getButtonText = () => {
     if (offer.download_url && offer.download_url.trim() !== '' && isValidUrl(offer.download_url)) {
       if (offer.download_url.includes('wa.me') || offer.download_url.includes('whatsapp')) {
-        return 'Contact on WhatsApp';
+        return t('common.contactOnWhatsApp');
       }
-      return 'Download App';
+      return t('common.downloadApp');
     }
-    return 'Contact for Download';
+    return t('common.contactForDownload');
   };
 
   const getButtonIcon = () => {

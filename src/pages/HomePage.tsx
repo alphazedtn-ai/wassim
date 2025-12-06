@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import IPTVCard from '../components/IPTVCard';
 import Footer from '../components/Footer';
 import SEOHead from '../components/SEOHead';
+import { useLanguage } from '../contexts/LanguageContext';
 import { IPTVOffer, AdminData, AndroidBox } from '../types';
 import { MessageCircle, Tv, Smartphone, Monitor, Wifi, Zap, Shield, Headphones } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -26,6 +27,7 @@ const HomePage: React.FC<HomePageProps> = ({
   onAdminClick,
   onCloseSupabaseWarning
 }) => {
+  const { t, isRTL } = useLanguage();
   const handleWhatsAppClick = () => {
     window.open('https://wa.me/21655338664', '_blank');
   };
@@ -76,11 +78,11 @@ const HomePage: React.FC<HomePageProps> = ({
       {/* Hero Section - Optimized for Mobile */}
       <section className="container mx-auto px-4 py-8 md:py-12 relative z-10">
         <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-4 md:mb-6 leading-tight">
-            Premium IPTV & Android Boxes in Tunisia
+          <h1 className={`text-3xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-4 md:mb-6 leading-tight ${isRTL ? 'text-right' : ''}`}>
+            {t('hero.title')}
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto px-2">
-            Experience high-quality streaming with our carefully curated IPTV packages and premium Android TV boxes. Serving Tunisia with reliable 4K streaming and international content.
+          <p className={`text-lg md:text-xl text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto px-2 ${isRTL ? 'text-right' : ''}`}>
+            {t('hero.subtitle')}
           </p>
           <button
             onClick={handleWhatsAppClick}
@@ -88,7 +90,7 @@ const HomePage: React.FC<HomePageProps> = ({
             aria-label="Contact TechnSat on WhatsApp"
           >
             <MessageCircle className="w-5 h-5 md:w-6 md:h-6" />
-            <span className="text-sm md:text-base">Get Started on WhatsApp</span>
+            <span className="text-sm md:text-base">{t('hero.getStarted')}</span>
           </button>
         </div>
 
@@ -97,7 +99,7 @@ const HomePage: React.FC<HomePageProps> = ({
           <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 text-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/10">
             <Tv className="w-6 h-6 md:w-8 md:h-8 text-blue-400 mx-auto mb-2" />
             <div className="text-xl md:text-2xl font-bold text-blue-400">{offers.length}+</div>
-            <div className="text-xs md:text-sm text-gray-300">IPTV Apps</div>
+            <div className="text-xs md:text-sm text-gray-300">{t('stats.iptvApps')}</div>
           </div>
           <Link 
             to="/android-boxes"
@@ -105,17 +107,17 @@ const HomePage: React.FC<HomePageProps> = ({
           >
             <Monitor className="w-6 h-6 md:w-8 md:h-8 text-orange-400 mx-auto mb-2 group-hover:scale-110 transition-transform duration-200" />
             <div className="text-xl md:text-2xl font-bold text-orange-400">{androidBoxes.length}+</div>
-            <div className="text-xs md:text-sm text-gray-300 group-hover:text-orange-300">Android Boxes</div>
+            <div className="text-xs md:text-sm text-gray-300 group-hover:text-orange-300">{t('stats.androidBoxes')}</div>
           </Link>
           <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 text-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/10">
             <Smartphone className="w-6 h-6 md:w-8 md:h-8 text-green-400 mx-auto mb-2" />
             <div className="text-xl md:text-2xl font-bold text-green-400">24/7</div>
-            <div className="text-xs md:text-sm text-gray-300">Support</div>
+            <div className="text-xs md:text-sm text-gray-300">{t('stats.support')}</div>
           </div>
           <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 text-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/10">
             <Wifi className="w-6 h-6 md:w-8 md:h-8 text-purple-400 mx-auto mb-2" />
             <div className="text-xl md:text-2xl font-bold text-purple-400">4K</div>
-            <div className="text-xs md:text-sm text-gray-300">Ultra HD</div>
+            <div className="text-xs md:text-sm text-gray-300">{t('stats.ultraHD')}</div>
           </div>
         </div>
       </section>
@@ -123,19 +125,19 @@ const HomePage: React.FC<HomePageProps> = ({
       {/* IPTV Offers Section */}
       <section className="container mx-auto px-4 py-6 md:py-8 relative z-10">
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-3 md:mb-4">
-            IPTV Applications
+          <h2 className={`text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-3 md:mb-4 ${isRTL ? 'text-right' : ''}`}>
+            {t('section.iptvApps')}
           </h2>
-          <p className="text-gray-400 max-w-lg mx-auto text-sm md:text-base px-2">
-            Premium IPTV apps with international content and reliable streaming quality for Tunisia.
+          <p className={`text-gray-400 max-w-lg mx-auto text-sm md:text-base px-2 ${isRTL ? 'text-right' : ''}`}>
+            {t('section.iptvAppsDesc')}
           </p>
         </div>
 
         {offers.length === 0 ? (
           <div className="text-center py-8 md:py-12">
             <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6 md:p-8 max-w-md mx-auto">
-              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">No Apps Available</h3>
-              <p className="text-gray-400 text-sm md:text-base">Check back soon for new IPTV applications!</p>
+              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">{t('common.noAppsAvailable')}</h3>
+              <p className="text-gray-400 text-sm md:text-base">{t('common.checkBackSoon')}</p>
             </div>
           </div>
         ) : (
@@ -150,19 +152,19 @@ const HomePage: React.FC<HomePageProps> = ({
       {/* Featured Android Boxes Preview */}
       <section className="container mx-auto px-4 py-6 md:py-8 relative z-10">
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-3 md:mb-4">
-            Featured Android TV Boxes
+          <h2 className={`text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-3 md:mb-4 ${isRTL ? 'text-right' : ''}`}>
+            {t('section.featuredBoxes')}
           </h2>
-          <p className="text-gray-400 max-w-lg mx-auto text-sm md:text-base px-2">
-            High-performance Android boxes for the ultimate streaming experience in Tunisia.
+          <p className={`text-gray-400 max-w-lg mx-auto text-sm md:text-base px-2 ${isRTL ? 'text-right' : ''}`}>
+            {t('section.featuredBoxesDesc')}
           </p>
         </div>
 
         {androidBoxes.length === 0 ? (
           <div className="text-center py-8 md:py-12">
             <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6 md:p-8 max-w-md mx-auto">
-              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">No Boxes Available</h3>
-              <p className="text-gray-400 text-sm md:text-base">Check back soon for new Android TV boxes!</p>
+              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">{t('common.noBoxesAvailable')}</h3>
+              <p className="text-gray-400 text-sm md:text-base">{t('common.checkBackSoonBoxes')}</p>
             </div>
           </div>
         ) : (
@@ -209,7 +211,7 @@ const HomePage: React.FC<HomePageProps> = ({
                 className="bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 text-orange-400 border border-orange-500/30 px-8 py-3 rounded-xl transition-all duration-200 inline-flex items-center space-x-2 backdrop-blur-sm"
               >
                 <Monitor className="w-5 h-5" />
-                <span>View All {androidBoxes.length} Android Boxes</span>
+                <span>{t('boxes.viewAll')} {androidBoxes.length} {t('stats.androidBoxes')}</span>
               </Link>
             </div>
           </>
@@ -220,10 +222,10 @@ const HomePage: React.FC<HomePageProps> = ({
       <section className="container mx-auto px-4 py-12 md:py-16 relative z-10">
         <div className="bg-white/5 backdrop-blur-md rounded-2xl md:rounded-3xl border border-white/10 p-6 md:p-12">
           <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-3 md:mb-4">
-              Why Choose TechnSat?
+            <h2 className={`text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-3 md:mb-4 ${isRTL ? 'text-right' : ''}`}>
+              {t('section.whyChoose')}
             </h2>
-            <p className="text-gray-400 text-sm md:text-base">Premium features that set us apart in Tunisia</p>
+            <p className={`text-gray-400 text-sm md:text-base ${isRTL ? 'text-right' : ''}`}>{t('section.whyChooseDesc')}</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
@@ -231,32 +233,32 @@ const HomePage: React.FC<HomePageProps> = ({
               <div className="bg-blue-500/20 w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 border border-blue-500/30">
                 <Zap className="w-6 h-6 md:w-8 md:h-8 text-blue-400" />
               </div>
-              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">Lightning Fast</h3>
-              <p className="text-gray-400 text-sm md:text-base">High-speed streaming with minimal buffering and maximum uptime.</p>
+              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">{t('feature.lightningFast')}</h3>
+              <p className="text-gray-400 text-sm md:text-base">{t('feature.lightningFastDesc')}</p>
             </div>
             
             <div className="text-center">
               <div className="bg-green-500/20 w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 border border-green-500/30">
                 <Tv className="w-6 h-6 md:w-8 md:h-8 text-green-400" />
               </div>
-              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">Global Content</h3>
-              <p className="text-gray-400 text-sm md:text-base">Access international channels and premium content worldwide.</p>
+              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">{t('feature.globalContent')}</h3>
+              <p className="text-gray-400 text-sm md:text-base">{t('feature.globalContentDesc')}</p>
             </div>
             
             <div className="text-center">
               <div className="bg-purple-500/20 w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 border border-purple-500/30">
                 <Shield className="w-6 h-6 md:w-8 md:h-8 text-purple-400" />
               </div>
-              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">Secure & Reliable</h3>
-              <p className="text-gray-400 text-sm md:text-base">Protected streaming with enterprise-grade security measures.</p>
+              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">{t('feature.secureReliable')}</h3>
+              <p className="text-gray-400 text-sm md:text-base">{t('feature.secureReliableDesc')}</p>
             </div>
 
             <div className="text-center">
               <div className="bg-orange-500/20 w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 border border-orange-500/30">
                 <Headphones className="w-6 h-6 md:w-8 md:h-8 text-orange-400" />
               </div>
-              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">24/7 Support</h3>
-              <p className="text-gray-400 text-sm md:text-base">Round-the-clock customer support via WhatsApp assistance.</p>
+              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">{t('feature.support247')}</h3>
+              <p className="text-gray-400 text-sm md:text-base">{t('feature.support247Desc')}</p>
             </div>
           </div>
         </div>

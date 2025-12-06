@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, User, X } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface AdminLoginProps {
   onLogin: (success: boolean) => void;
@@ -7,6 +8,7 @@ interface AdminLoginProps {
 }
 
 const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onClose }) => {
+  const { t } = useLanguage();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -43,14 +45,14 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onClose }) => {
           <div className="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
             <Lock className="w-8 h-8 text-blue-400" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Admin Login</h2>
-          <p className="text-gray-300">Enter your credentials to access the admin panel</p>
+          <h2 className="text-2xl font-bold text-white mb-2">{t('admin.login')}</h2>
+          <p className="text-gray-300">{t('admin.enterCredentials')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Username
+              {t('admin.username')}
             </label>
             <div className="relative">
               <User className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -59,7 +61,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onClose }) => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-white placeholder-gray-400 backdrop-blur-sm"
-                placeholder="Enter username"
+                placeholder={t('admin.enterUsername')}
                 required
               />
             </div>
@@ -67,7 +69,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onClose }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Password
+              {t('admin.password')}
             </label>
             <div className="relative">
               <Lock className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -76,7 +78,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onClose }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-white placeholder-gray-400 backdrop-blur-sm"
-                placeholder="Enter password"
+                placeholder={t('admin.enterPassword')}
                 required
               />
             </div>
@@ -84,7 +86,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onClose }) => {
 
           {error && (
             <div className="bg-red-500/20 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl text-sm backdrop-blur-sm">
-              {error}
+              {error === 'Invalid username or password' ? t('admin.invalidCredentials') : error}
             </div>
           )}
 
@@ -93,7 +95,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onClose }) => {
             disabled={loading}
             className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 transform hover:scale-105 disabled:scale-100"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? t('admin.loggingIn') : t('admin.login')}
           </button>
         </form>
       </div>

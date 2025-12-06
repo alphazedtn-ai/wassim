@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Settings } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import LanguageSelector from './LanguageSelector';
 
 interface HeaderProps {
   onAdminClick: () => void;
@@ -9,6 +11,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onAdminClick, serviceName }) => {
   const location = useLocation();
+  const { t, isRTL } = useLanguage();
 
   return (
     <header className="bg-black/20 backdrop-blur-md border-b border-white/10 sticky top-0 z-30">
@@ -32,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick, serviceName }) => {
           
           <div className="flex items-center space-x-4">
             {/* Navigation */}
-            <nav className="hidden md:flex items-center space-x-6">
+            <nav className={`hidden md:flex items-center ${isRTL ? 'space-x-reverse space-x-6' : 'space-x-6'}`}>
               <Link 
                 to="/" 
                 className={`text-sm font-medium transition-colors duration-200 ${
@@ -41,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick, serviceName }) => {
                     : 'text-gray-300 hover:text-white'
                 }`}
               >
-                Home
+                {t('nav.home')}
               </Link>
               <Link 
                 to="/android-boxes" 
@@ -51,12 +54,12 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick, serviceName }) => {
                     : 'text-gray-300 hover:text-white'
                 }`}
               >
-                Android TV Boxes
+                {t('nav.androidBoxes')}
               </Link>
             </nav>
             
             {/* Mobile Navigation */}
-            <nav className="md:hidden flex items-center space-x-4">
+            <nav className={`md:hidden flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
               <Link 
                 to="/" 
                 className={`text-xs font-medium px-3 py-2 rounded-lg transition-all duration-200 ${
@@ -65,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick, serviceName }) => {
                     : 'text-gray-300 hover:text-white hover:bg-white/10'
                 }`}
               >
-                Home
+                {t('nav.home')}
               </Link>
               <Link 
                 to="/android-boxes" 
@@ -75,10 +78,14 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick, serviceName }) => {
                     : 'text-gray-300 hover:text-white hover:bg-white/10'
                 }`}
               >
-                Boxes
+                {t('nav.androidBoxes')}
               </Link>
             </nav>
             
+            {/* Language Selector */}
+            <LanguageSelector />
+            
+            {/* Admin Button */}
             <button
               onClick={onAdminClick}
               className="p-3 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-200 group border border-white/20"

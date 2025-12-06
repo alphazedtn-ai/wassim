@@ -3,6 +3,7 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SEOHead from '../components/SEOHead';
+import { useLanguage } from '../contexts/LanguageContext';
 import { AndroidBox, AdminData } from '../types';
 import { 
   Monitor, 
@@ -33,6 +34,7 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
   onAdminClick
 }) => {
   const { id } = useParams<{ id: string }>();
+  const { t, isRTL } = useLanguage();
   const box = boxes.find(b => b.id === id);
 
   const handleWhatsAppClick = () => {
@@ -103,9 +105,9 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
       {/* Breadcrumb */}
       <section className="container mx-auto px-4 py-4 relative z-10">
         <div className="flex items-center space-x-2 text-sm text-gray-400">
-          <Link to="/" className="hover:text-white transition-colors">Home</Link>
+          <Link to="/" className="hover:text-white transition-colors">{t('nav.home')}</Link>
           <span>/</span>
-          <Link to="/android-boxes" className="hover:text-white transition-colors">Android TV Boxes</Link>
+          <Link to="/android-boxes" className="hover:text-white transition-colors">{t('nav.androidBoxes')}</Link>
           <span>/</span>
           <span className="text-orange-400">{box.name}</span>
         </div>
@@ -131,12 +133,12 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
                 {box.is_available ? (
                   <div className="bg-green-500/20 backdrop-blur-sm border border-green-500/30 text-green-400 px-3 py-2 rounded-full text-sm flex items-center space-x-2">
                     <CheckCircle className="w-4 h-4" />
-                    <span>In Stock</span>
+                    <span>{t('boxes.inStock')}</span>
                   </div>
                 ) : (
                   <div className="bg-red-500/20 backdrop-blur-sm border border-red-500/30 text-red-400 px-3 py-2 rounded-full text-sm flex items-center space-x-2">
                     <XCircle className="w-4 h-4" />
-                    <span>Out of Stock</span>
+                    <span>{t('boxes.outOfStock')}</span>
                   </div>
                 )}
               </div>
@@ -195,13 +197,13 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
             {/* Specifications */}
             {features.length > 0 && (
               <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6">
-                <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
+                <h3 className={`text-xl font-bold text-white mb-4 flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
                   <Cpu className="w-5 h-5 text-blue-400" />
-                  <span>Technical Specifications</span>
+                  <span>{t('boxDetail.specifications')}</span>
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {features.map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-2">
+                    <div key={index} className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
                       <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
                       <span className="text-gray-300 text-sm">{feature}</span>
                     </div>
@@ -212,33 +214,33 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
 
             {/* Key Benefits */}
             <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6">
-              <h3 className="text-xl font-bold text-white mb-4">Why Choose This Box?</h3>
+              <h3 className="text-xl font-bold text-white mb-4">{t('boxDetail.whyChoose')}</h3>
               <div className="space-y-3">
-                <div className="flex items-center space-x-3">
+                <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                   <div className="bg-blue-500/20 p-2 rounded-lg border border-blue-500/30">
                     <Zap className="w-4 h-4 text-blue-400" />
                   </div>
                   <div>
-                    <h4 className="text-white font-medium">High Performance</h4>
-                    <p className="text-gray-400 text-sm">Smooth 4K streaming with minimal buffering</p>
+                    <h4 className="text-white font-medium">{t('boxDetail.highPerformance')}</h4>
+                    <p className="text-gray-400 text-sm">{t('boxDetail.highPerformanceDesc')}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
+                <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                   <div className="bg-green-500/20 p-2 rounded-lg border border-green-500/30">
                     <Shield className="w-4 h-4 text-green-400" />
                   </div>
                   <div>
-                    <h4 className="text-white font-medium">Reliable & Secure</h4>
-                    <p className="text-gray-400 text-sm">Enterprise-grade security and stability</p>
+                    <h4 className="text-white font-medium">{t('boxDetail.reliableSecure')}</h4>
+                    <p className="text-gray-400 text-sm">{t('boxDetail.reliableSecureDesc')}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
+                <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                   <div className="bg-orange-500/20 p-2 rounded-lg border border-orange-500/30">
                     <Smartphone className="w-4 h-4 text-orange-400" />
                   </div>
                   <div>
-                    <h4 className="text-white font-medium">24/7 Support</h4>
-                    <p className="text-gray-400 text-sm">Round-the-clock customer assistance</p>
+                    <h4 className="text-white font-medium">{t('boxDetail.support247')}</h4>
+                    <p className="text-gray-400 text-sm">{t('boxDetail.support247Desc')}</p>
                   </div>
                 </div>
               </div>
@@ -248,8 +250,8 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
             <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 backdrop-blur-md rounded-2xl border border-orange-500/20 p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-xl font-bold text-white">Ready to Order?</h3>
-                  <p className="text-gray-300 text-sm">Get your premium Android TV box today</p>
+                  <h3 className="text-xl font-bold text-white">{t('boxDetail.readyToOrder')}</h3>
+                  <p className="text-gray-300 text-sm">{t('boxDetail.getToday')}</p>
                 </div>
                 <div className="text-2xl font-bold text-orange-400">{box.price}</div>
               </div>
@@ -267,13 +269,13 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
                   {box.is_available ? (
                     <>
                       <ShoppingCart className="w-5 h-5" />
-                      <span>Buy Now - {box.price}</span>
+                      <span>{t('boxDetail.buyNow')} - {box.price}</span>
                       <ExternalLink className="w-4 h-4" />
                     </>
                   ) : (
                     <>
                       <XCircle className="w-5 h-5" />
-                      <span>Currently Out of Stock</span>
+                      <span>{t('boxDetail.currentlyOutOfStock')}</span>
                     </>
                   )}
                 </button>
@@ -283,7 +285,7 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
                   className="w-full bg-green-600/20 hover:bg-green-600/30 text-green-400 border border-green-500/30 py-3 px-6 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 backdrop-blur-sm"
                 >
                   <MessageCircle className="w-5 h-5" />
-                  <span>Ask Questions on WhatsApp</span>
+                  <span>{t('boxDetail.askQuestions')}</span>
                 </button>
               </div>
             </div>
@@ -293,7 +295,7 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
         {/* Related Products */}
         {relatedBoxes.length > 0 && (
           <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6 md:p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">You Might Also Like</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">{t('boxDetail.youMightLike')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedBoxes.map((relatedBox) => (
                 <Link
@@ -336,10 +338,10 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
         <div className="mt-8">
           <Link
             to="/android-boxes"
-            className="inline-flex items-center space-x-2 text-orange-400 hover:text-orange-300 transition-colors"
+            className={`inline-flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} text-orange-400 hover:text-orange-300 transition-colors`}
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to All Android Boxes</span>
+            <span>{t('boxDetail.backToAll')}</span>
           </Link>
         </div>
       </section>
