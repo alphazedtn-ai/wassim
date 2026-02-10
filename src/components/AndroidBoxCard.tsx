@@ -1,12 +1,15 @@
 import React from 'react';
 import { ShoppingCart, Monitor, CheckCircle, XCircle, Cpu } from 'lucide-react';
 import { AndroidBox } from '../types';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface AndroidBoxCardProps {
   box: AndroidBox;
 }
 
 const AndroidBoxCard: React.FC<AndroidBoxCardProps> = ({ box }) => {
+  const { t } = useLanguage();
+
   const handlePurchase = () => {
     if (box.purchase_url && box.purchase_url.trim() !== '') {
       try {
@@ -58,7 +61,7 @@ const AndroidBoxCard: React.FC<AndroidBoxCardProps> = ({ box }) => {
               <h3 className="text-lg font-bold text-white group-hover:text-orange-400 transition-colors duration-200">
                 {box.name}
               </h3>
-              <p className="text-sm text-gray-400">Android TV Box</p>
+              <p className="text-sm text-gray-400">{t('boxes.androidBoxes')}</p>
             </div>
           </div>
           <div className="text-right">
@@ -76,9 +79,9 @@ const AndroidBoxCard: React.FC<AndroidBoxCardProps> = ({ box }) => {
           <div className="mb-4">
             <div className="flex items-center space-x-2 mb-2">
               <Cpu className="w-4 h-4 text-blue-400" />
-              <span className="text-sm font-medium text-blue-400">Specifications</span>
+              <span className="text-sm font-medium text-blue-400">{t('boxDetail.specifications')}</span>
             </div>
-            <p className="text-xs text-gray-400 line-clamp-2">{box.specifications}</p>
+            <p className="text-xs text-gray-300 line-clamp-3 break-words">{box.specifications}</p>
           </div>
         )}
         
@@ -93,7 +96,7 @@ const AndroidBoxCard: React.FC<AndroidBoxCardProps> = ({ box }) => {
           }`}
         >
           <ShoppingCart className="w-5 h-5" />
-          <span>{box.is_available ? 'Buy Now' : 'Out of Stock'}</span>
+          <span>{box.is_available ? t('boxDetail.buyNow') : t('boxes.outOfStock')}</span>
         </button>
       </div>
     </div>

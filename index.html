@@ -65,11 +65,20 @@
     <link rel="alternate" hreflang="ar" href="https://wassimtechtn.netlify.app" />
     <link rel="alternate" hreflang="fr" href="https://wassimtechtn.netlify.app" />
 
-    <!-- JotForm Embed -->
-    <script src='https://cdn.jotfor.ms/agent/embedjs/019b07f4913874d986a8e784165c1686bc84/embed.js'></script>
+    <!-- ElevenLabs AI Agent Widget -->
+    <script src="https://elevenlabs.io/convai-embed-latest.js"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      window.addEventListener('load', () => {
+        if (window.ElevenLabs && window.ElevenLabs.convai) {
+          const client = window.ElevenLabs.convai.createClient();
+          client.setAgentId('agent_9201kghva9ktfwkvmvhd24hy08cc');
+          client.setWavenetModel(true);
+        }
+      });
+    </script>
   </body>
 </html>

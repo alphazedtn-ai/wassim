@@ -77,10 +77,18 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
     return <Navigate to="/android-boxes" replace />;
   }
 
-  // Parse specifications into features array
-  const features = box.specifications 
-    ? box.specifications.split(',').map(spec => spec.trim()).filter(spec => spec.length > 0)
-    : [];
+  // Parse specifications into features array with better formatting
+  const parseSpecifications = (specs: string) => {
+    if (!specs) return [];
+
+    return specs
+      .split(/[,\-]/)
+      .map(spec => spec.trim())
+      .filter(spec => spec.length > 0 && spec.length < 100)
+      .slice(0, 12);
+  };
+
+  const features = parseSpecifications(box.specifications);
 
   // Related boxes (exclude current box)
   const relatedBoxes = boxes.filter(b => b.id !== box.id).slice(0, 3);
@@ -201,11 +209,11 @@ const AndroidBoxDetailPage: React.FC<AndroidBoxDetailPageProps> = ({
                   <Cpu className="w-5 h-5 text-blue-400" />
                   <span>{t('boxDetail.specifications')}</span>
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {features.map((feature, index) => (
-                    <div key={index} className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
-                      <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm">{feature}</span>
+                    <div key={index} className={`flex items-start ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} bg-white/5 p-3 rounded-lg border border-white/5`}>
+                      <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-300 text-sm break-words leading-relaxed">{feature}</span>
                     </div>
                   ))}
                 </div>
