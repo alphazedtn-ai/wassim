@@ -352,15 +352,6 @@ const AndroidBoxesPage: React.FC<AndroidBoxesPageProps> = ({
 
       <Footer />
 
-      {/* Floating WhatsApp Button */}
-      <button
-        onClick={handleWhatsAppClick}
-        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-green-500 hover:bg-green-600 text-white p-3 md:p-4 rounded-full shadow-lg hover:shadow-green-500/25 transform hover:scale-110 transition-all duration-200 z-40 border border-green-500/30"
-        title="Contact TechnSat on WhatsApp"
-        aria-label="Contact us on WhatsApp"
-      >
-        <MessageCircle className="w-5 h-5 md:w-6 md:h-6" />
-      </button>
     </div>
   );
 };

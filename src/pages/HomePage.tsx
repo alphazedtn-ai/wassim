@@ -96,11 +96,6 @@ const HomePage: React.FC<HomePageProps> = ({
 
         {/* Modern Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-12 md:mb-16">
-          <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 text-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/10">
-            <Tv className="w-6 h-6 md:w-8 md:h-8 text-blue-400 mx-auto mb-2" />
-            <div className="text-xl md:text-2xl font-bold text-blue-400">{offers.length}+</div>
-            <div className="text-xs md:text-sm text-gray-300">{t('stats.iptvApps')}</div>
-          </div>
           <Link 
             to="/android-boxes"
             className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 text-center border border-white/10 hover:border-orange-400/30 transition-all duration-300 hover:bg-white/10 group cursor-pointer"
@@ -110,53 +105,31 @@ const HomePage: React.FC<HomePageProps> = ({
             <div className="text-xs md:text-sm text-gray-300 group-hover:text-orange-300">{t('stats.androidBoxes')}</div>
           </Link>
           <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 text-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/10">
+            <Tv className="w-6 h-6 md:w-8 md:h-8 text-blue-400 mx-auto mb-2" />
+            <div className="text-xl md:text-2xl font-bold text-blue-400">15+</div>
+            <div className="text-xs md:text-sm text-gray-300">Récepteurs Satellite</div>
+          </div>
+          <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 text-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/10">
+            <Wifi className="w-6 h-6 md:w-8 md:h-8 text-purple-400 mx-auto mb-2" />
+            <div className="text-xl md:text-2xl font-bold text-purple-400">50+</div>
+            <div className="text-xs md:text-sm text-gray-300">Accessoires</div>
+          </div>
+          <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 text-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/10">
             <Smartphone className="w-6 h-6 md:w-8 md:h-8 text-green-400 mx-auto mb-2" />
             <div className="text-xl md:text-2xl font-bold text-green-400">24/7</div>
             <div className="text-xs md:text-sm text-gray-300">{t('stats.support')}</div>
           </div>
-          <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 text-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/10">
-            <Wifi className="w-6 h-6 md:w-8 md:h-8 text-purple-400 mx-auto mb-2" />
-            <div className="text-xl md:text-2xl font-bold text-purple-400">4K</div>
-            <div className="text-xs md:text-sm text-gray-300">{t('stats.ultraHD')}</div>
-          </div>
         </div>
       </section>
 
-      {/* IPTV Offers Section */}
-      <section className="container mx-auto px-4 py-6 md:py-8 relative z-10">
-        <div className="text-center mb-8 md:mb-12">
-          <h2 className={`text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-3 md:mb-4 ${isRTL ? 'text-right' : ''}`}>
-            {t('section.iptvApps')}
-          </h2>
-          <p className={`text-gray-400 max-w-lg mx-auto text-sm md:text-base px-2 ${isRTL ? 'text-right' : ''}`}>
-            {t('section.iptvAppsDesc')}
-          </p>
-        </div>
-
-        {offers.length === 0 ? (
-          <div className="text-center py-8 md:py-12">
-            <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6 md:p-8 max-w-md mx-auto">
-              <h3 className="text-lg md:text-xl font-semibold text-white mb-2">{t('common.noAppsAvailable')}</h3>
-              <p className="text-gray-400 text-sm md:text-base">{t('common.checkBackSoon')}</p>
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-            {offers.map(offer => (
-              <IPTVCard key={offer.id} offer={offer} />
-            ))}
-          </div>
-        )}
-      </section>
-
-      {/* Featured Android Boxes Preview */}
+      {/* Android Boxes Section */}
       <section className="container mx-auto px-4 py-6 md:py-8 relative z-10">
         <div className="text-center mb-8 md:mb-12">
           <h2 className={`text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-3 md:mb-4 ${isRTL ? 'text-right' : ''}`}>
-            {t('section.featuredBoxes')}
+            Android TV Boxes
           </h2>
           <p className={`text-gray-400 max-w-lg mx-auto text-sm md:text-base px-2 ${isRTL ? 'text-right' : ''}`}>
-            {t('section.featuredBoxesDesc')}
+            Transformez votre TV en centre de divertissement intelligent avec nos boîtiers Android TV premium.
           </p>
         </div>
 
@@ -169,8 +142,8 @@ const HomePage: React.FC<HomePageProps> = ({
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
-              {androidBoxes.slice(0, 3).map(box => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mb-8">
+              {androidBoxes.map(box => (
                 <Link 
                   key={box.id}
                   to={`/android-boxes/${box.id}`}
@@ -204,18 +177,199 @@ const HomePage: React.FC<HomePageProps> = ({
                 </Link>
               ))}
             </div>
-            
-            <div className="text-center">
-              <Link
-                to="/android-boxes"
-                className="bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 text-orange-400 border border-orange-500/30 px-8 py-3 rounded-xl transition-all duration-200 inline-flex items-center space-x-2 backdrop-blur-sm"
-              >
-                <Monitor className="w-5 h-5" />
-                <span>{t('boxes.viewAll')} {androidBoxes.length} {t('stats.androidBoxes')}</span>
-              </Link>
-            </div>
           </>
         )}
+      </section>
+
+      {/* Satellite Receivers Section */}
+      <section className="container mx-auto px-4 py-6 md:py-8 relative z-10">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className={`text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-3 md:mb-4 ${isRTL ? 'text-right' : ''}`}>
+            Récepteurs Satellite
+          </h2>
+          <p className={`text-gray-400 max-w-lg mx-auto text-sm md:text-base px-2 ${isRTL ? 'text-right' : ''}`}>
+            Découvrez notre gamme complète de récepteurs satellite haute performance pour une réception optimale.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+          {/* Sample Satellite Receivers */}
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-blue-400/30 transition-all duration-300 transform hover:scale-105 hover:bg-white/10 group overflow-hidden">
+            <div className="relative h-48 overflow-hidden rounded-t-2xl">
+              <img 
+                src="https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                alt="Récepteur Satellite HD"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+              <div className="absolute bottom-3 left-3">
+                <div className="bg-black/80 backdrop-blur-sm border-2 border-blue-400 text-white px-3 py-2 rounded-xl font-bold text-lg shadow-lg">
+                  85 TND
+                </div>
+              </div>
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors duration-200 mb-2">
+                Récepteur HD Premium
+              </h3>
+              <p className="text-gray-300 text-sm line-clamp-2">
+                Récepteur satellite HD avec décodage numérique et interface utilisateur intuitive.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-blue-400/30 transition-all duration-300 transform hover:scale-105 hover:bg-white/10 group overflow-hidden">
+            <div className="relative h-48 overflow-hidden rounded-t-2xl">
+              <img 
+                src="https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                alt="Récepteur 4K Ultra HD"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+              <div className="absolute bottom-3 left-3">
+                <div className="bg-black/80 backdrop-blur-sm border-2 border-blue-400 text-white px-3 py-2 rounded-xl font-bold text-lg shadow-lg">
+                  150 TND
+                </div>
+              </div>
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors duration-200 mb-2">
+                Récepteur 4K Ultra HD
+              </h3>
+              <p className="text-gray-300 text-sm line-clamp-2">
+                Récepteur satellite 4K avec support HDR et connectivité WiFi intégrée.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-blue-400/30 transition-all duration-300 transform hover:scale-105 hover:bg-white/10 group overflow-hidden">
+            <div className="relative h-48 overflow-hidden rounded-t-2xl">
+              <img 
+                src="https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                alt="Récepteur Professionnel"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+              <div className="absolute bottom-3 left-3">
+                <div className="bg-black/80 backdrop-blur-sm border-2 border-blue-400 text-white px-3 py-2 rounded-xl font-bold text-lg shadow-lg">
+                  220 TND
+                </div>
+              </div>
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors duration-200 mb-2">
+                Récepteur Professionnel
+              </h3>
+              <p className="text-gray-300 text-sm line-clamp-2">
+                Récepteur satellite professionnel avec enregistrement et fonctions avancées.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Accessories Section */}
+      <section className="container mx-auto px-4 py-6 md:py-8 relative z-10">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className={`text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-3 md:mb-4 ${isRTL ? 'text-right' : ''}`}>
+            Accessoires
+          </h2>
+          <p className={`text-gray-400 max-w-lg mx-auto text-sm md:text-base px-2 ${isRTL ? 'text-right' : ''}`}>
+            Complétez votre installation avec nos accessoires de qualité professionnelle.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          {/* Sample Accessories */}
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-purple-400/30 transition-all duration-300 transform hover:scale-105 hover:bg-white/10 group overflow-hidden">
+            <div className="relative h-40 overflow-hidden rounded-t-2xl">
+              <img 
+                src="https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                alt="Câbles HDMI"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+              <div className="absolute bottom-2 left-2">
+                <div className="bg-black/80 backdrop-blur-sm border border-purple-400 text-white px-2 py-1 rounded-lg font-bold text-sm shadow-lg">
+                  15 TND
+                </div>
+              </div>
+            </div>
+            <div className="p-4">
+              <h3 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors duration-200 mb-1">
+                Câbles HDMI 4K
+              </h3>
+              <p className="text-gray-300 text-xs line-clamp-2">
+                Câbles HDMI haute qualité pour transmission 4K.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-purple-400/30 transition-all duration-300 transform hover:scale-105 hover:bg-white/10 group overflow-hidden">
+            <div className="relative h-40 overflow-hidden rounded-t-2xl">
+              <img 
+                src="https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                alt="Télécommandes"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+              <div className="absolute bottom-2 left-2">
+                <div className="bg-black/80 backdrop-blur-sm border border-purple-400 text-white px-2 py-1 rounded-lg font-bold text-sm shadow-lg">
+                  25 TND
+                </div>
+              </div>
+            </div>
+            <div className="p-4">
+              <h3 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors duration-200 mb-1">
+                Télécommandes
+              </h3>
+              <p className="text-gray-300 text-xs line-clamp-2">
+                Télécommandes universelles compatibles.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-purple-400/30 transition-all duration-300 transform hover:scale-105 hover:bg-white/10 group overflow-hidden">
+            <div className="relative h-40 overflow-hidden rounded-t-2xl">
+              <img 
+                src="https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                alt="Antennes Satellite"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+              <div className="absolute bottom-2 left-2">
+                <div className="bg-black/80 backdrop-blur-sm border border-purple-400 text-white px-2 py-1 rounded-lg font-bold text-sm shadow-lg">
+                  120 TND
+                </div>
+              </div>
+            </div>
+            <div className="p-4">
+              <h3 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors duration-200 mb-1">
+                Antennes Satellite
+              </h3>
+              <p className="text-gray-300 text-xs line-clamp-2">
+                Antennes paraboliques haute performance.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-purple-400/30 transition-all duration-300 transform hover:scale-105 hover:bg-white/10 group overflow-hidden">
+            <div className="relative h-40 overflow-hidden rounded-t-2xl">
+              <img 
+                src="https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                alt="Supports Muraux"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+              <div className="absolute bottom-2 left-2">
+                <div className="bg-black/80 backdrop-blur-sm border border-purple-400 text-white px-2 py-1 rounded-lg font-bold text-sm shadow-lg">
+                  35 TND
+                </div>
+              </div>
+            </div>
+            <div className="p-4">
+              <h3 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors duration-200 mb-1">
+                Supports Muraux
+              </h3>
+              <p className="text-gray-300 text-xs line-clamp-2">
+                Supports muraux ajustables pour TV.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Modern Features Section */}
@@ -265,16 +419,6 @@ const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       <Footer />
-
-      {/* Floating WhatsApp Button - Mobile Optimized */}
-      <button
-        onClick={handleWhatsAppClick}
-        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-green-500 hover:bg-green-600 text-white p-3 md:p-4 rounded-full shadow-lg hover:shadow-green-500/25 transform hover:scale-110 transition-all duration-200 z-40 border border-green-500/30"
-        title="Contact TechnSat on WhatsApp"
-        aria-label="Contact us on WhatsApp"
-      >
-        <MessageCircle className="w-5 h-5 md:w-6 md:h-6" />
-      </button>
     </div>
   );
 };
