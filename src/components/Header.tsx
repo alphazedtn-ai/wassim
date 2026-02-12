@@ -56,6 +56,26 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick, serviceName }) => {
               >
                 {t('nav.androidBoxes')}
               </Link>
+              <Link 
+                to="/satellite-receivers" 
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  location.pathname.startsWith('/satellite-receivers') 
+                    ? 'text-blue-400' 
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Récepteurs Satellite
+              </Link>
+              <Link 
+                to="/accessories" 
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  location.pathname.startsWith('/accessories') 
+                    ? 'text-purple-400' 
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Accessoires
+              </Link>
             </nav>
             
             {/* Mobile Navigation */}
@@ -79,6 +99,26 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick, serviceName }) => {
                 }`}
               >
                 {t('nav.androidBoxes')}
+              </Link>
+              <Link 
+                to="/satellite-receivers" 
+                className={`text-xs font-medium px-2 py-2 rounded-lg transition-all duration-200 ${
+                  location.pathname.startsWith('/satellite-receivers') 
+                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' 
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                Satellite
+              </Link>
+              <Link 
+                to="/accessories" 
+                className={`text-xs font-medium px-2 py-2 rounded-lg transition-all duration-200 ${
+                  location.pathname.startsWith('/accessories') 
+                    ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' 
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                Access.
               </Link>
             </nav>
             
