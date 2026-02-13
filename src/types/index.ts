@@ -23,6 +23,32 @@ export interface AndroidBox {
   updated_at?: string;
 }
 
+export interface SatelliteReceiver {
+  id: string;
+  name: string;
+  price: string;
+  description: string;
+  image_url: string;
+  purchase_url: string;
+  specifications: string;
+  is_available: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Accessory {
+  id: string;
+  name: string;
+  price: string;
+  description: string;
+  image_url: string;
+  purchase_url: string;
+  category: string; // e.g., "cables", "remotes", "antennas", "mounts"
+  is_available: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface AdminData {
   id?: string;
   service_name: string;

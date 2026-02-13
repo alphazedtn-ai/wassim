@@ -4,21 +4,29 @@ import { isSupabaseConfigured } from './lib/supabase';
 import HomePage from './pages/HomePage';
 import AndroidBoxesPage from './pages/AndroidBoxesPage';
 import AndroidBoxDetailPage from './pages/AndroidBoxDetailPage';
+import SatelliteReceiversPage from './pages/SatelliteReceiversPage';
+import AccessoriesPage from './pages/AccessoriesPage';
 import AdminLogin from './components/AdminLogin';
 import AdminPanel from './components/AdminPanel';
-import { IPTVOffer, AdminData, AndroidBox } from './types';
+import { IPTVOffer, AdminData, AndroidBox, SatelliteReceiver, Accessory } from './types';
 import { 
   getOffers, 
   getAdminData, 
   getAndroidBoxes,
+  getSatelliteReceivers,
+  getAccessories,
   subscribeToOffers, 
   subscribeToAdminSettings,
-  subscribeToAndroidBoxes
+  subscribeToAndroidBoxes,
+  subscribeToSatelliteReceivers,
+  subscribeToAccessories
 } from './utils/database';
 
 function App() {
   const [offers, setOffers] = useState<IPTVOffer[]>([]);
   const [androidBoxes, setAndroidBoxes] = useState<AndroidBox[]>([]);
+  const [satelliteReceivers, setSatelliteReceivers] = useState<SatelliteReceiver[]>([]);
+  const [accessories, setAccessories] = useState<Accessory[]>([]);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [adminData, setAdminData] = useState<AdminData>({
@@ -45,26 +53,40 @@ function App() {
       setAndroidBoxes(updatedBoxes);
     });
 
+    const receiversSubscription = subscribeToSatelliteReceivers((updatedReceivers) => {
+      setSatelliteReceivers(updatedReceivers);
+    });
+
+    const accessoriesSubscription = subscribeToAccessories((updatedAccessories) => {
+      setAccessories(updatedAccessories);
+    });
+
     // Cleanup subscriptions on unmount
     return () => {
       offersSubscription.unsubscribe();
       adminSubscription.unsubscribe();
       boxesSubscription.unsubscribe();
+      receiversSubscription.unsubscribe();
+      accessoriesSubscription.unsubscribe();
     };
   }, []);
 
   const loadInitialData = async () => {
     try {
       setLoading(true);
-      const [offersData, adminDataResult, boxesData] = await Promise.all([
+      const [offersData, adminDataResult, boxesData, receiversData, accessoriesData] = await Promise.all([
         getOffers(),
         getAdminData(),
-        getAndroidBoxes()
+        getAndroidBoxes(),
+        getSatelliteReceivers(),
+        getAccessories()
       ]);
       
       setOffers(offersData);
       setAdminData(adminDataResult);
       setAndroidBoxes(boxesData);
+      setSatelliteReceivers(receiversData);
+      setAccessories(accessoriesData);
     } catch (error) {
       console.error('Error loading initial data:', error);
     } finally {
@@ -141,6 +163,26 @@ function App() {
           element={
             <AndroidBoxDetailPage 
               boxes={androidBoxes}
+              adminData={adminData}
+              onAdminClick={handleAdminClick}
+            />
+          } 
+        />
+        <Route 
+          path="/satellite-receivers" 
+          element={
+            <SatelliteReceiversPage 
+              receivers={satelliteReceivers}
+              adminData={adminData}
+              onAdminClick={handleAdminClick}
+            />
+          } 
+        />
+        <Route 
+          path="/accessories" 
+          element={
+            <AccessoriesPage 
+              accessories={accessories}
               adminData={adminData}
               onAdminClick={handleAdminClick}
             />

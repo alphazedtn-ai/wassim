@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
-import { IPTVOffer, AdminData, AndroidBox } from '../types';
+import { IPTVOffer, AdminData, AndroidBox, SatelliteReceiver, Accessory } from '../types';
 
 // Check if Supabase is properly configured
 const checkSupabaseConfig = () => {
@@ -566,6 +566,454 @@ export const deleteAndroidBox = async (id: string): Promise<boolean> => {
   }
 };
 
+// Satellite Receivers Functions
+export const getSatelliteReceivers = async (): Promise<SatelliteReceiver[]> => {
+  try {
+    if (!checkSupabaseConfig()) {
+      return [];
+    }
+
+    console.log('Fetching satellite receivers...');
+    
+    const { data, error } = await getAuthenticatedSupabase()
+      .from('satellite_receivers')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      logError('getSatelliteReceivers', error);
+      return [];
+    }
+
+    console.log(`Successfully fetched ${data?.length || 0} satellite receivers`);
+    return data || [];
+  } catch (error) {
+    logError('getSatelliteReceivers', error);
+    return [];
+  }
+};
+
+export const saveSatelliteReceiver = async (receiver: Omit<SatelliteReceiver, 'id' | 'created_at' | 'updated_at'>): Promise<SatelliteReceiver | null> => {
+  try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot save satellite receiver: Supabase not configured');
+      return null;
+    }
+
+    if (!receiver.name?.trim() || !receiver.price?.trim() || !receiver.purchase_url?.trim()) {
+      console.error('Validation failed: Required fields missing');
+      return null;
+    }
+
+    const receiverData = {
+      name: receiver.name.trim(),
+      price: receiver.price.trim(),
+      description: receiver.description?.trim() || '',
+      image_url: receiver.image_url?.trim() || 'https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=400',
+      purchase_url: receiver.purchase_url.trim(),
+      specifications: receiver.specifications?.trim() || '',
+      is_available: receiver.is_available ?? true
+    };
+
+    console.log('Saving new satellite receiver:', receiverData);
+
+    const { data, error } = await getAuthenticatedSupabase()
+      .from('satellite_receivers')
+      .insert(receiverData)
+      .select()
+      .single();
+
+    if (error) {
+      logError('saveSatelliteReceiver', error, receiverData);
+      return null;
+    }
+
+    console.log('Satellite receiver saved successfully:', data);
+    return data;
+  } catch (error) {
+    logError('saveSatelliteReceiver', error, receiver);
+    return null;
+  }
+};
+
+export const updateSatelliteReceiver = async (id: string, receiver: Partial<SatelliteReceiver>): Promise<SatelliteReceiver | null> => {
+  try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot update satellite receiver: Supabase not configured');
+      return null;
+    }
+
+    if (!id?.trim()) {
+      console.error('Validation failed: Valid ID is required for update');
+      return null;
+    }
+
+    console.log(`Starting update for satellite receiver ID: ${id}`);
+
+    const { data: existingReceiver, error: checkError } = await getAuthenticatedSupabase()
+      .from('satellite_receivers')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (checkError) {
+      logError('updateSatelliteReceiver - existence check', checkError, { id });
+      return null;
+    }
+
+    if (!existingReceiver) {
+      console.error(`No satellite receiver found with ID: ${id}`);
+      return null;
+    }
+
+    const updateData: any = {};
+    
+    if (receiver.name !== undefined) {
+      if (!receiver.name.trim()) {
+        console.error('Validation failed: Name cannot be empty');
+        return null;
+      }
+      updateData.name = receiver.name.trim();
+    }
+    
+    if (receiver.price !== undefined) {
+      if (!receiver.price.trim()) {
+        console.error('Validation failed: Price cannot be empty');
+        return null;
+      }
+      updateData.price = receiver.price.trim();
+    }
+    
+    if (receiver.description !== undefined) {
+      updateData.description = receiver.description?.trim() || '';
+    }
+    
+    if (receiver.image_url !== undefined) {
+      updateData.image_url = receiver.image_url?.trim() || 'https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=400';
+    }
+    
+    if (receiver.purchase_url !== undefined) {
+      if (!receiver.purchase_url.trim()) {
+        console.error('Validation failed: Purchase URL cannot be empty');
+        return null;
+      }
+      updateData.purchase_url = receiver.purchase_url.trim();
+    }
+    
+    if (receiver.specifications !== undefined) {
+      updateData.specifications = receiver.specifications?.trim() || '';
+    }
+    
+    if (receiver.is_available !== undefined) {
+      updateData.is_available = receiver.is_available;
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      console.log('No changes detected, returning existing receiver');
+      return existingReceiver;
+    }
+
+    const { data: updatedData, error: updateError } = await getAuthenticatedSupabase()
+      .from('satellite_receivers')
+      .update(updateData)
+      .eq('id', id)
+      .select('*');
+
+    if (updateError) {
+      logError('updateSatelliteReceiver - update operation', updateError, { id, updateData });
+      return null;
+    }
+
+    if (!updatedData || updatedData.length === 0) {
+      console.log('Update operation completed but no rows were affected');
+      return existingReceiver;
+    }
+
+    const updatedReceiver = updatedData[0];
+    console.log('Satellite receiver updated successfully:', updatedReceiver);
+    return updatedReceiver;
+  } catch (error) {
+    logError('updateSatelliteReceiver', error, { id, receiver });
+    return null;
+  }
+};
+
+export const deleteSatelliteReceiver = async (id: string): Promise<boolean> => {
+  try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot delete satellite receiver: Supabase not configured');
+      return false;
+    }
+
+    if (!id?.trim()) {
+      console.error('Validation failed: Valid ID is required for delete');
+      return false;
+    }
+
+    console.log(`Attempting to delete satellite receiver with ID: ${id}`);
+
+    const { data: existingReceiver, error: checkError } = await getAuthenticatedSupabase()
+      .from('satellite_receivers')
+      .select('id, name')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (checkError) {
+      logError('deleteSatelliteReceiver - existence check', checkError, { id });
+      return false;
+    }
+
+    if (!existingReceiver) {
+      console.error(`Satellite receiver not found with ID: ${id}`);
+      return false;
+    }
+
+    console.log(`Deleting receiver: ${existingReceiver.name}`);
+
+    const { error: deleteError } = await getAuthenticatedSupabase()
+      .from('satellite_receivers')
+      .delete()
+      .eq('id', id);
+
+    if (deleteError) {
+      logError('deleteSatelliteReceiver - delete operation', deleteError, { id });
+      return false;
+    }
+
+    console.log('Satellite receiver deleted successfully');
+    return true;
+  } catch (error) {
+    logError('deleteSatelliteReceiver', error, { id });
+    return false;
+  }
+};
+
+// Accessories Functions
+export const getAccessories = async (): Promise<Accessory[]> => {
+  try {
+    if (!checkSupabaseConfig()) {
+      return [];
+    }
+
+    console.log('Fetching accessories...');
+    
+    const { data, error } = await getAuthenticatedSupabase()
+      .from('accessories')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      logError('getAccessories', error);
+      return [];
+    }
+
+    console.log(`Successfully fetched ${data?.length || 0} accessories`);
+    return data || [];
+  } catch (error) {
+    logError('getAccessories', error);
+    return [];
+  }
+};
+
+export const saveAccessory = async (accessory: Omit<Accessory, 'id' | 'created_at' | 'updated_at'>): Promise<Accessory | null> => {
+  try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot save accessory: Supabase not configured');
+      return null;
+    }
+
+    if (!accessory.name?.trim() || !accessory.price?.trim() || !accessory.purchase_url?.trim() || !accessory.category?.trim()) {
+      console.error('Validation failed: Required fields missing');
+      return null;
+    }
+
+    const accessoryData = {
+      name: accessory.name.trim(),
+      price: accessory.price.trim(),
+      description: accessory.description?.trim() || '',
+      image_url: accessory.image_url?.trim() || 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=400',
+      purchase_url: accessory.purchase_url.trim(),
+      category: accessory.category.trim(),
+      is_available: accessory.is_available ?? true
+    };
+
+    console.log('Saving new accessory:', accessoryData);
+
+    const { data, error } = await getAuthenticatedSupabase()
+      .from('accessories')
+      .insert(accessoryData)
+      .select()
+      .single();
+
+    if (error) {
+      logError('saveAccessory', error, accessoryData);
+      return null;
+    }
+
+    console.log('Accessory saved successfully:', data);
+    return data;
+  } catch (error) {
+    logError('saveAccessory', error, accessory);
+    return null;
+  }
+};
+
+export const updateAccessory = async (id: string, accessory: Partial<Accessory>): Promise<Accessory | null> => {
+  try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot update accessory: Supabase not configured');
+      return null;
+    }
+
+    if (!id?.trim()) {
+      console.error('Validation failed: Valid ID is required for update');
+      return null;
+    }
+
+    console.log(`Starting update for accessory ID: ${id}`);
+
+    const { data: existingAccessory, error: checkError } = await getAuthenticatedSupabase()
+      .from('accessories')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (checkError) {
+      logError('updateAccessory - existence check', checkError, { id });
+      return null;
+    }
+
+    if (!existingAccessory) {
+      console.error(`No accessory found with ID: ${id}`);
+      return null;
+    }
+
+    const updateData: any = {};
+    
+    if (accessory.name !== undefined) {
+      if (!accessory.name.trim()) {
+        console.error('Validation failed: Name cannot be empty');
+        return null;
+      }
+      updateData.name = accessory.name.trim();
+    }
+    
+    if (accessory.price !== undefined) {
+      if (!accessory.price.trim()) {
+        console.error('Validation failed: Price cannot be empty');
+        return null;
+      }
+      updateData.price = accessory.price.trim();
+    }
+    
+    if (accessory.description !== undefined) {
+      updateData.description = accessory.description?.trim() || '';
+    }
+    
+    if (accessory.image_url !== undefined) {
+      updateData.image_url = accessory.image_url?.trim() || 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=400';
+    }
+    
+    if (accessory.purchase_url !== undefined) {
+      if (!accessory.purchase_url.trim()) {
+        console.error('Validation failed: Purchase URL cannot be empty');
+        return null;
+      }
+      updateData.purchase_url = accessory.purchase_url.trim();
+    }
+    
+    if (accessory.category !== undefined) {
+      if (!accessory.category.trim()) {
+        console.error('Validation failed: Category cannot be empty');
+        return null;
+      }
+      updateData.category = accessory.category.trim();
+    }
+    
+    if (accessory.is_available !== undefined) {
+      updateData.is_available = accessory.is_available;
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      console.log('No changes detected, returning existing accessory');
+      return existingAccessory;
+    }
+
+    const { data: updatedData, error: updateError } = await getAuthenticatedSupabase()
+      .from('accessories')
+      .update(updateData)
+      .eq('id', id)
+      .select('*');
+
+    if (updateError) {
+      logError('updateAccessory - update operation', updateError, { id, updateData });
+      return null;
+    }
+
+    if (!updatedData || updatedData.length === 0) {
+      console.log('Update operation completed but no rows were affected');
+      return existingAccessory;
+    }
+
+    const updatedAccessory = updatedData[0];
+    console.log('Accessory updated successfully:', updatedAccessory);
+    return updatedAccessory;
+  } catch (error) {
+    logError('updateAccessory', error, { id, accessory });
+    return null;
+  }
+};
+
+export const deleteAccessory = async (id: string): Promise<boolean> => {
+  try {
+    if (!checkSupabaseConfig()) {
+      console.error('Cannot delete accessory: Supabase not configured');
+      return false;
+    }
+
+    if (!id?.trim()) {
+      console.error('Validation failed: Valid ID is required for delete');
+      return false;
+    }
+
+    console.log(`Attempting to delete accessory with ID: ${id}`);
+
+    const { data: existingAccessory, error: checkError } = await getAuthenticatedSupabase()
+      .from('accessories')
+      .select('id, name')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (checkError) {
+      logError('deleteAccessory - existence check', checkError, { id });
+      return false;
+    }
+
+    if (!existingAccessory) {
+      console.error(`Accessory not found with ID: ${id}`);
+      return false;
+    }
+
+    console.log(`Deleting accessory: ${existingAccessory.name}`);
+
+    const { error: deleteError } = await getAuthenticatedSupabase()
+      .from('accessories')
+      .delete()
+      .eq('id', id);
+
+    if (deleteError) {
+      logError('deleteAccessory - delete operation', deleteError, { id });
+      return false;
+    }
+
+    console.log('Accessory deleted successfully');
+    return true;
+  } catch (error) {
+    logError('deleteAccessory', error, { id });
+    return false;
+  }
+};
+
 // Admin Settings Functions
 export const getAdminData = async (): Promise<AdminData> => {
   try {
@@ -846,6 +1294,89 @@ export const subscribeToAdminSettings = (callback: (adminData: AdminData) => voi
     )
     .subscribe((status) => {
       console.log(`Admin settings subscription status [${channelName}]:`, status);
+    });
+
+  return subscription;
+};
+
+// Real-time subscription functions for new tables
+export const subscribeToSatelliteReceivers = (callback: (receivers: SatelliteReceiver[]) => void) => {
+  if (!checkSupabaseConfig()) {
+    console.warn('Cannot subscribe to satellite receivers: Supabase not configured');
+    return { unsubscribe: () => {} };
+  }
+
+  const channelName = `satellite_receivers_${Date.now()}_${Math.random()}`;
+  
+  console.log(`Setting up real-time subscription for satellite receivers: ${channelName}`);
+  
+  const subscription = supabase
+    .channel(channelName)
+    .on('postgres_changes', 
+      { 
+        event: '*', 
+        schema: 'public', 
+        table: 'satellite_receivers' 
+      }, 
+      async (payload) => {
+        try {
+          console.log('Satellite receivers change detected:', payload.eventType, payload.new || payload.old);
+          setTimeout(async () => {
+            try {
+              const receivers = await getSatelliteReceivers();
+              callback(receivers);
+            } catch (error) {
+              logError('subscribeToSatelliteReceivers - callback', error);
+            }
+          }, 100);
+        } catch (error) {
+          logError('subscribeToSatelliteReceivers - event handler', error, payload);
+        }
+      }
+    )
+    .subscribe((status) => {
+      console.log(`Satellite receivers subscription status [${channelName}]:`, status);
+    });
+
+  return subscription;
+};
+
+export const subscribeToAccessories = (callback: (accessories: Accessory[]) => void) => {
+  if (!checkSupabaseConfig()) {
+    console.warn('Cannot subscribe to accessories: Supabase not configured');
+    return { unsubscribe: () => {} };
+  }
+
+  const channelName = `accessories_${Date.now()}_${Math.random()}`;
+  
+  console.log(`Setting up real-time subscription for accessories: ${channelName}`);
+  
+  const subscription = supabase
+    .channel(channelName)
+    .on('postgres_changes', 
+      { 
+        event: '*', 
+        schema: 'public', 
+        table: 'accessories' 
+      }, 
+      async (payload) => {
+        try {
+          console.log('Accessories change detected:', payload.eventType, payload.new || payload.old);
+          setTimeout(async () => {
+            try {
+              const accessories = await getAccessories();
+              callback(accessories);
+            } catch (error) {
+              logError('subscribeToAccessories - callback', error);
+            }
+          }, 100);
+        } catch (error) {
+          logError('subscribeToAccessories - event handler', error, payload);
+        }
+      }
+    )
+    .subscribe((status) => {
+      console.log(`Accessories subscription status [${channelName}]:`, status);
     });
 
   return subscription;
