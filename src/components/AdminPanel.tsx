@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, CreditCard as Edit, Trash2, Save, X, LogOut, AlertCircle, Monitor, RefreshCw, CheckCircle, Key, Satellite, Settings } from 'lucide-react'fer, AdminData, AndroidBox } from '../types';
+import { Plus, CreditCard as Edit, Trash2, Save, X, LogOut, AlertCircle, Monitor, RefreshCw, CheckCircle, Key, Satellite, Settings, Tv } from 'lucide-react';
+import { IPTVOffer, AdminData, AndroidBox } from '../types';
 import { 
   getOffers, 
   getAdminData, 
