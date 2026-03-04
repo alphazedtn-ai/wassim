@@ -74,19 +74,34 @@ function App() {
   const loadInitialData = async () => {
     try {
       setLoading(true);
-      const [offersData, adminDataResult, boxesData, receiversData, accessoriesData] = await Promise.all([
+      
+      // Load core data that always exists
+      const [offersData, adminData, androidBoxesData] = await Promise.all([
         getOffers(),
         getAdminData(),
-        getAndroidBoxes(),
-        getSatelliteReceivers(),
-        getAccessories()
+        getAndroidBoxes()
       ]);
       
       setOffers(offersData);
       setAdminData(adminDataResult);
       setAndroidBoxes(boxesData);
-      setSatelliteReceivers(receiversData);
-      setAccessories(accessoriesData);
+      
+      // Try to load satellite receivers and accessories, but don't fail if tables don't exist
+      try {
+        const satelliteReceiversData = await getSatelliteReceivers();
+        setSatelliteReceivers(satelliteReceiversData);
+      } catch (error) {
+        console.warn('Satellite receivers table not available yet. Please apply database migrations.');
+        setSatelliteReceivers([]);
+      }
+      
+      try {
+        const accessoriesData = await getAccessories();
+        setAccessories(accessoriesData);
+      } catch (error) {
+        console.warn('Accessories table not available yet. Please apply database migrations.');
+        setAccessories([]);
+      }
     } catch (error) {
       console.error('Error loading initial data:', error);
     } finally {
