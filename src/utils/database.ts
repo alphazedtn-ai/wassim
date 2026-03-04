@@ -581,6 +581,11 @@ export const getSatelliteReceivers = async (): Promise<SatelliteReceiver[]> => {
       .order('created_at', { ascending: false });
 
     if (error) {
+      // If table doesn't exist, return empty array instead of logging error
+      if (error.code === '42P01') {
+        console.warn('Satellite receivers table does not exist yet. Please apply database migrations.');
+        return [];
+      }
       logError('getSatelliteReceivers', error);
       return [];
     }
@@ -600,6 +605,16 @@ export const saveSatelliteReceiver = async (receiver: Omit<SatelliteReceiver, 'i
       return null;
     }
 
+    // Check if table exists first
+    const { error: tableCheckError } = await getAuthenticatedSupabase()
+      .from('satellite_receivers')
+      .select('id')
+      .limit(1);
+
+    if (tableCheckError && tableCheckError.code === '42P01') {
+      console.error('Cannot save satellite receiver: Table does not exist. Please apply database migrations.');
+      return null;
+    }
     if (!receiver.name?.trim() || !receiver.price?.trim() || !receiver.purchase_url?.trim()) {
       console.error('Validation failed: Required fields missing');
       return null;
@@ -643,6 +658,16 @@ export const updateSatelliteReceiver = async (id: string, receiver: Partial<Sate
       return null;
     }
 
+    // Check if table exists first
+    const { error: tableCheckError } = await getAuthenticatedSupabase()
+      .from('satellite_receivers')
+      .select('id')
+      .limit(1);
+
+    if (tableCheckError && tableCheckError.code === '42P01') {
+      console.error('Cannot update satellite receiver: Table does not exist. Please apply database migrations.');
+      return null;
+    }
     if (!id?.trim()) {
       console.error('Validation failed: Valid ID is required for update');
       return null;
@@ -745,6 +770,16 @@ export const deleteSatelliteReceiver = async (id: string): Promise<boolean> => {
       return false;
     }
 
+    // Check if table exists first
+    const { error: tableCheckError } = await getAuthenticatedSupabase()
+      .from('satellite_receivers')
+      .select('id')
+      .limit(1);
+
+    if (tableCheckError && tableCheckError.code === '42P01') {
+      console.error('Cannot delete satellite receiver: Table does not exist. Please apply database migrations.');
+      return false;
+    }
     if (!id?.trim()) {
       console.error('Validation failed: Valid ID is required for delete');
       return false;
@@ -803,6 +838,11 @@ export const getAccessories = async (): Promise<Accessory[]> => {
       .order('created_at', { ascending: false });
 
     if (error) {
+      // If table doesn't exist, return empty array instead of logging error
+      if (error.code === '42P01') {
+        console.warn('Accessories table does not exist yet. Please apply database migrations.');
+        return [];
+      }
       logError('getAccessories', error);
       return [];
     }
@@ -822,6 +862,16 @@ export const saveAccessory = async (accessory: Omit<Accessory, 'id' | 'created_a
       return null;
     }
 
+    // Check if table exists first
+    const { error: tableCheckError } = await getAuthenticatedSupabase()
+      .from('accessories')
+      .select('id')
+      .limit(1);
+
+    if (tableCheckError && tableCheckError.code === '42P01') {
+      console.error('Cannot save accessory: Table does not exist. Please apply database migrations.');
+      return null;
+    }
     if (!accessory.name?.trim() || !accessory.price?.trim() || !accessory.purchase_url?.trim() || !accessory.category?.trim()) {
       console.error('Validation failed: Required fields missing');
       return null;
@@ -865,6 +915,16 @@ export const updateAccessory = async (id: string, accessory: Partial<Accessory>)
       return null;
     }
 
+    // Check if table exists first
+    const { error: tableCheckError } = await getAuthenticatedSupabase()
+      .from('accessories')
+      .select('id')
+      .limit(1);
+
+    if (tableCheckError && tableCheckError.code === '42P01') {
+      console.error('Cannot update accessory: Table does not exist. Please apply database migrations.');
+      return null;
+    }
     if (!id?.trim()) {
       console.error('Validation failed: Valid ID is required for update');
       return null;
@@ -971,6 +1031,16 @@ export const deleteAccessory = async (id: string): Promise<boolean> => {
       return false;
     }
 
+    // Check if table exists first
+    const { error: tableCheckError } = await getAuthenticatedSupabase()
+      .from('accessories')
+      .select('id')
+      .limit(1);
+
+    if (tableCheckError && tableCheckError.code === '42P01') {
+      console.error('Cannot delete accessory: Table does not exist. Please apply database migrations.');
+      return false;
+    }
     if (!id?.trim()) {
       console.error('Validation failed: Valid ID is required for delete');
       return false;
@@ -1306,6 +1376,17 @@ export const subscribeToSatelliteReceivers = (callback: (receivers: SatelliteRec
     return { unsubscribe: () => {} };
   }
 
+  // Check if table exists before setting up subscription
+  getAuthenticatedSupabase()
+    .from('satellite_receivers')
+    .select('id')
+    .limit(1)
+    .then(({ error }) => {
+      if (error && error.code === '42P01') {
+        console.warn('Cannot subscribe to satellite receivers: Table does not exist yet. Please apply database migrations.');
+        return;
+      }
+    });
   const channelName = `satellite_receivers_${Date.now()}_${Math.random()}`;
   
   console.log(`Setting up real-time subscription for satellite receivers: ${channelName}`);
@@ -1347,6 +1428,17 @@ export const subscribeToAccessories = (callback: (accessories: Accessory[]) => v
     return { unsubscribe: () => {} };
   }
 
+  // Check if table exists before setting up subscription
+  getAuthenticatedSupabase()
+    .from('accessories')
+    .select('id')
+    .limit(1)
+    .then(({ error }) => {
+      if (error && error.code === '42P01') {
+        console.warn('Cannot subscribe to accessories: Table does not exist yet. Please apply database migrations.');
+        return;
+      }
+    });
   const channelName = `accessories_${Date.now()}_${Math.random()}`;
   
   console.log(`Setting up real-time subscription for accessories: ${channelName}`);
