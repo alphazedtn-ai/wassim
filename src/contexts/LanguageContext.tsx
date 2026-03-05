@@ -342,13 +342,16 @@ interface LanguageProviderProps {
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>('fr');
 
   useEffect(() => {
     // Load saved language from localStorage
     const savedLanguage = localStorage.getItem('language') as Language;
     if (savedLanguage && ['en', 'ar', 'fr'].includes(savedLanguage)) {
       setLanguage(savedLanguage);
+    } else {
+      // Set French as default if no saved language
+      setLanguage('fr');
     }
   }, []);
 
