@@ -84,7 +84,7 @@ function App() {
       
       setOffers(offersData);
       setAdminData(adminData);
-      setAndroidBoxes(boxesData);
+      setAndroidBoxes(androidBoxesData);
       
       // Try to load satellite receivers and accessories, but don't fail if tables don't exist
       try {
