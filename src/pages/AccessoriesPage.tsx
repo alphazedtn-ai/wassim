@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SEOHead from '../components/SEOHead';
 import { Accessory, AdminData } from '../types';
+import { getAccessories } from '../utils/database';
 import { 
   Settings, 
   MessageCircle, 
@@ -34,9 +36,31 @@ const AccessoriesPage: React.FC<AccessoriesPageProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [displayAccessories, setDisplayAccessories] = useState<Accessory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [filterAvailable, setFilterAvailable] = useState<'all' | 'available' | 'unavailable'>('all');
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'name' | 'price' | 'newest'>('newest');
+
+  useEffect(() => {
+    const loadAccessories = async () => {
+      try {
+        setIsLoading(true);
+        setHasError(false);
+        const accessoriesData = await getAccessories();
+        setDisplayAccessories(accessoriesData);
+      } catch (error) {
+        console.error('Error loading accessories:', error);
+        setHasError(true);
+        setDisplayAccessories([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadAccessories();
+  }, []);
 
   const handleWhatsAppClick = () => {
     window.open('https://wa.me/21655338664', '_blank');
@@ -56,10 +80,10 @@ const AccessoriesPage: React.FC<AccessoriesPageProps> = ({
   };
 
   // Get unique categories
-  const categories = Array.from(new Set(accessories.map(acc => acc.category)));
+  const categories = Array.from(new Set(displayAccessories.map(acc => acc.category)));
 
   // Filter and sort accessories
-  const filteredAccessories = accessories
+  const filteredAccessories = displayAccessories
     .filter(accessory => {
       const matchesSearch = accessory.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            accessory.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -147,25 +171,28 @@ const AccessoriesPage: React.FC<AccessoriesPageProps> = ({
             Complétez votre installation avec nos accessoires de qualité professionnelle. 
             Câbles, télécommandes, antennes et supports pour une expérience optimale.
           </p>
-          <div className="flex items-center justify-center space-x-6 text-sm text-gray-400">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-green-400" />
-              <span>{accessories.filter(acc => acc.is_available).length} Disponibles</span>
+          {!isLoading && !hasError && (
+            <div className="flex items-center justify-center space-x-6 text-sm text-gray-400">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-4 h-4 text-green-400" />
+                <span>{displayAccessories.filter(acc => acc.is_available).length} Disponibles</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Settings className="w-4 h-4 text-purple-400" />
+                <span>{displayAccessories.length} Produits</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Star className="w-4 h-4 text-yellow-400" />
+                <span>Qualité Pro</span>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Settings className="w-4 h-4 text-purple-400" />
-              <span>{accessories.length} Produits</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Star className="w-4 h-4 text-yellow-400" />
-              <span>Qualité Pro</span>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
       {/* Filters and Search */}
-      <section className="container mx-auto px-4 mb-8 relative z-10">
+      {!isLoading && !hasError && displayAccessories.length > 0 && (
+        <section className="container mx-auto px-4 mb-8 relative z-10">
         <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Search */}
@@ -244,11 +271,35 @@ const AccessoriesPage: React.FC<AccessoriesPageProps> = ({
             </div>
           </div>
         </div>
-      </section>
+        </section>
+      )}
 
       {/* Results */}
       <section className="container mx-auto px-4 pb-12 relative z-10">
-        {filteredAccessories.length === 0 ? (
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-8 max-w-md mx-auto">
+              <Settings className="w-16 h-16 text-purple-400 mx-auto mb-4 animate-spin" />
+              <h3 className="text-xl font-semibold text-white mb-2">Chargement...</h3>
+              <p className="text-gray-400">
+                Récupération des accessoires en cours...
+              </p>
+            </div>
+          </div>
+        ) : hasError ? (
+          <div className="text-center py-12">
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-8 max-w-md mx-auto">
+              <XCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-2">Erreur de Chargement</h3>
+              <p className="text-gray-400 mb-4">
+                Impossible de charger les accessoires. Les tables de base de données n'existent pas encore.
+              </p>
+              <p className="text-sm text-gray-500">
+                Veuillez appliquer les migrations de base de données pour créer les tables nécessaires.
+              </p>
+            </div>
+          </div>
+        ) : filteredAccessories.length === 0 ? (
           <div className="text-center py-12">
             <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-8 max-w-md mx-auto">
               <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
@@ -275,7 +326,7 @@ const AccessoriesPage: React.FC<AccessoriesPageProps> = ({
             {/* Results Header */}
             <div className="flex items-center justify-between mb-6">
               <p className="text-gray-400">
-                Affichage de {filteredAccessories.length} sur {accessories.length} accessoires
+                Affichage de {filteredAccessories.length} sur {displayAccessories.length} accessoires
               </p>
             </div>
 
