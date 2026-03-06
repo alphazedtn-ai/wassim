@@ -296,6 +296,41 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
     setRefreshing(true);
     try {
       console.log('Refreshing all data...');
+      // Check if we're editing or creating new
+      let result;
+      if (editingSatelliteReceiver) {
+        result = await updateSatelliteReceiver(editingSatelliteReceiver.id, newSatelliteReceiver);
+        if (result) {
+          setSatelliteReceivers(prev => prev.map(receiver => 
+            receiver.id === editingSatelliteReceiver.id ? result : receiver
+          ));
+          setSuccess('Récepteur satellite mis à jour avec succès!');
+        } else {
+          setError('Erreur lors de la mise à jour du récepteur satellite');
+        }
+      } else {
+        result = await saveSatelliteReceiver(newSatelliteReceiver);
+        if (result) {
+          setSatelliteReceivers(prev => [result, ...prev]);
+          setSuccess('Récepteur satellite ajouté avec succès!');
+        } else {
+          setError('Erreur lors de l\'ajout du récepteur satellite. Vérifiez que les tables de base de données existent.');
+        }
+      }
+      
+      if (result) {
+        // Reset form
+        setNewSatelliteReceiver({
+          name: '',
+          price: '',
+          description: '',
+          image_url: '',
+          purchase_url: '',
+          specifications: '',
+          is_available: true
+        });
+        setEditingSatelliteReceiver(null);
+      }
       const [offersData, adminDataResult, boxesData, satellitesData, accessoriesData] = await Promise.all([
         getOffers(),
         getAdminData(),
@@ -463,7 +498,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
       }
     } catch (error) {
       console.error('Error saving satellite receiver:', error);
-      showMessage('Échec de l\'enregistrement du récepteur satellite. Veuillez réessayer.', true);
+      setError('Erreur lors de l\'enregistrement du récepteur satellite. Les tables de base de données n\'existent peut-être pas encore.');
     } finally {
       setSaving(false);
     }

@@ -605,6 +605,7 @@ export const saveSatelliteReceiver = async (receiver: Omit<SatelliteReceiver, 'i
       return null;
     }
 
+    // Enhanced validation
     if (!receiver.name?.trim() || !receiver.price?.trim() || !receiver.purchase_url?.trim()) {
       console.error('Validation failed: Required fields missing');
       return null;
@@ -622,6 +623,10 @@ export const saveSatelliteReceiver = async (receiver: Omit<SatelliteReceiver, 'i
 
     console.log('Saving new satellite receiver:', receiverData);
 
+    // Check current session
+    const { data: { session } } = await supabase.auth.getSession();
+    console.log('Current session for satellite receiver save:', session ? 'authenticated' : 'not authenticated');
+
     const { data, error } = await getAuthenticatedSupabase()
       .from('satellite_receivers')
       .insert(receiverData)
@@ -629,7 +634,18 @@ export const saveSatelliteReceiver = async (receiver: Omit<SatelliteReceiver, 'i
       .single();
 
     if (error) {
+      // Check if it's a table doesn't exist error
+      if (error.code === '42P01') {
+        console.error('Satellite receivers table does not exist. Please apply database migrations.');
+        return null;
+      }
+      
       logError('saveSatelliteReceiver', error, receiverData);
+      
+      if (error.code === '42501') {
+        console.error('RLS Policy Error: Make sure you are authenticated and have proper permissions');
+      }
+      
       return null;
     }
 
